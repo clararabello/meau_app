@@ -1,26 +1,27 @@
 import 'package:flutter/material.dart';
 
-class LoginScreen extends StatelessWidget {
+class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
     return Scaffold(
       backgroundColor: const Color(0xfffafafa),
 
-      appBar: AppBar(
-          titleSpacing: 1,
-          iconTheme: IconThemeData(color: Colors.white),
-          title: Text("Login", style: TextStyle(color: const Color(0xff434343))),
-          backgroundColor: const Color(0xffcfe9e5),
-          leading: Icon(Icons.dehaze, color: const Color(0xff434343))
-      ),
-
       body:
       Center(
         child: Column(
           children: <Widget>[
 
+            Icon(Icons.dehaze),
+
             SizedBox(height: 64.0),
+
+            Text(
+              'Hello world',
+              style: TextStyle(
+                fontFamily: 'Courgette-Regular'
+              ),
+            ),
 
             Padding(
               padding: const EdgeInsets.only(
@@ -64,28 +65,28 @@ class LoginScreen extends StatelessWidget {
 
 
             MaterialButton(
-              color: const Color(0xff194f7c),
-              textColor: Colors.white,
-              minWidth: 280,
-              height: 40,
-              child:
-                  FlatButton.icon(
-                    icon: Icon(Icons.dehaze),
-                    label: Text("ENTRAR COM FACEBOOK"),
-                    textColor: Colors.white,
-                    onPressed: () => print("Entrar com Facebook"),
-                  )
+                color: const Color(0xff194f7c),
+                textColor: Colors.white,
+                minWidth: 280,
+                height: 40,
+                child:
+                FlatButton.icon(
+                  icon: Icon(Icons.dehaze),
+                  label: Text("ENTRAR COM FACEBOOK"),
+                  textColor: Colors.white,
+                  onPressed: () => print("Entrar com Facebook"),
+                )
 
             ),
 
             SizedBox(height: 8.0),
 
             MaterialButton(
-              color: const Color(0xfff15f5c),
-              textColor: Colors.white,
-              minWidth: 280,
-              height: 40,
-              child:
+                color: const Color(0xfff15f5c),
+                textColor: Colors.white,
+                minWidth: 280,
+                height: 40,
+                child:
                 FlatButton.icon(
                   icon: Icon(Icons.dehaze),
                   label: Text("ENTRAR COM GOOGLE"),
