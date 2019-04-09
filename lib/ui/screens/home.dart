@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-
 class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    //var queryData = MediaQuery.of(context);
+    //double devicePixelRatio = queryData.devicePixelRatio;
 
     return Scaffold(
       backgroundColor: const Color(0xfffafafa),
@@ -12,88 +13,85 @@ class Home extends StatelessWidget {
         child: Column(
           children: <Widget>[
 
-            Icon(Icons.dehaze),
+            Container(    // icone de menu
+              height: 56,
+              padding: new EdgeInsets.only(left: 12, top: 12),
+              alignment: Alignment.topLeft,
+              child: Icon(Icons.dehaze, color: const Color(0xff88c9bf),),
+            ),
 
-            SizedBox(height: 64.0),
-
-            Text(
-              'Hello world',
+            Text( // texto "Olá!"
+              'Olá!',
               style: TextStyle(
-                fontFamily: 'Courgette-Regular'
+                fontFamily: 'Courgette-Regular',
+                fontSize: 72,
+                color: const Color(0xffffd358)
               ),
-            ),
-
-            Padding(
-              padding: const EdgeInsets.only(
-                left: 20.0,
-                right: 20.0,
-              ),
-              child: TextFormField(
-                decoration: InputDecoration(
-                    labelText: 'Nome de usuário'
-                ),
-              ),
-            ),
-
-            SizedBox(height: 20.0),
-
-            Padding(
-              padding: const EdgeInsets.only(
-                left: 20.0,
-                right: 20.0,
-              ),
-              child: TextFormField(
-                decoration: InputDecoration(
-                    labelText: 'Senha'
-                ),
-              ),
-
             ),
 
             SizedBox(height: 52.0),
 
-            MaterialButton(
-              color: const Color(0xff88c9bf),
+            Text( // Texto inicial
+              'Bem vindo ao Meau! \n Aqui você pode adotar, doar e ajudar \n '
+                  'cães e gatos com facilidade. \n Qual o seu interesse?',
+              style: TextStyle(
+                  fontFamily: 'Roboto-Regular',
+                  fontSize: 16,
+                  color: const Color(0xff757575)
+              ),
+              textAlign: TextAlign.center
+            ),
+
+            SizedBox(height: 48.0),
+
+            //-----------------------------------------------------//
+
+
+            MaterialButton( // Botão adotar
+              color: const Color(0xffffd358),
               textColor: const Color(0xff434343),
-              minWidth: 280,
+              minWidth: 232,
               height: 40,
-              child: Text("ENTRAR"),
-              onPressed: () => print("Entrar"),
+              child: Text("ADOTAR"),
+              onPressed: () => print("ADOTAR"),
             ),
 
-            SizedBox(height: 72.0),
+            SizedBox(height: 12.0),
 
 
-            MaterialButton(
-                color: const Color(0xff194f7c),
-                textColor: Colors.white,
-                minWidth: 280,
-                height: 40,
-                child:
-                FlatButton.icon(
-                  icon: Icon(Icons.dehaze),
-                  label: Text("ENTRAR COM FACEBOOK"),
-                  textColor: Colors.white,
-                  onPressed: () => print("Entrar com Facebook"),
-                )
-
+            MaterialButton(  // Botão ajudar
+              color: const Color(0xffffd358),
+              textColor: const Color(0xff434343),
+              minWidth: 232,
+              height: 40,
+              child: Text("AJUDAR"),
+              onPressed: () => print("AJUDAR"),
             ),
 
-            SizedBox(height: 8.0),
+            SizedBox(height: 12.0),
 
-            MaterialButton(
-                color: const Color(0xfff15f5c),
-                textColor: Colors.white,
-                minWidth: 280,
-                height: 40,
-                child:
-                FlatButton.icon(
-                  icon: Icon(Icons.dehaze),
-                  label: Text("ENTRAR COM GOOGLE"),
-                  textColor: Colors.white,
-                  onPressed: () => print("Entrar com Google"),
-                )
-            )
+            MaterialButton(   // Botão cadastrar
+              color: const Color(0xffffd358),
+              textColor: const Color(0xff434343),
+              minWidth: 232,
+              height: 40,
+              child: Text("CADASTRAR ANIMAL"),
+              onPressed: () => print("CADASTRAR"),
+            ),
+
+            SizedBox(height: 44.0),
+
+            FlatButton(  // link login
+              textColor: const Color(0xff88c9bf),
+              onPressed: () {
+                    Navigator.pushNamed(context, '/login');
+              },
+              child: Text("login"),),
+
+            SizedBox(height: 68.0),
+
+            Image.asset('assets/images/Meau_marca_2.png', alignment: Alignment.center, width: 122,), // imagem meau
+
           ],
         ),
       ),

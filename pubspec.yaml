@@ -43,7 +43,14 @@ flutter:
   fonts:
     - family: Courgette-Regular
       fonts:
-      - asset: assets/Courgette-Regular.ttf
+        - asset: assets/fonts/Courgette-Regular.ttf
+
+    - family: Roboto-Regular
+      fonts:
+        - asset: assets/fonts/Roboto-Regular.ttf
+
+  assets:
+    - assets/images/Meau_marca_2.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:
