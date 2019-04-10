@@ -49,6 +49,10 @@ flutter:
       fonts:
         - asset: assets/fonts/Roboto-Regular.ttf
 
+    - family: Roboto-Medium
+      fonts:
+        - asset: assets/fonts/Roboto-Medium.ttf
+
   assets:
     - assets/images/Meau_marca_2.png
 

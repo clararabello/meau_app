@@ -10,7 +10,7 @@ class LoginScreen extends StatelessWidget {
       appBar: AppBar(
           titleSpacing: 1,
           iconTheme: IconThemeData(color: Colors.white),
-          title: Text("Login", style: TextStyle(color: const Color(0xff434343))),
+          title: Text("Login", style: TextStyle(color: const Color(0xff434343), fontFamily: 'Roboto-Medium', fontSize: 20,)),
           backgroundColor: const Color(0xffcfe9e5),
           leading: Icon(Icons.dehaze, color: const Color(0xff434343))
       ),

@@ -88,6 +88,14 @@ class Home extends StatelessWidget {
               },
               child: Text("login"),),
 
+            FlatButton(  // link login
+              textColor: const Color(0xff88c9bf),
+              onPressed: () {
+                Navigator.pushNamed(context, '/register');
+              },
+              child: Text("cadastrar conta"),),
+
+
             SizedBox(height: 68.0),
 
             Image.asset('assets/images/Meau_marca_2.png', alignment: Alignment.center, width: 122,), // imagem meau
