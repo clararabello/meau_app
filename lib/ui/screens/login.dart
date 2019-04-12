@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:first_project/ui/screens/home.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:first_project/auth.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -17,11 +18,10 @@ class _LoginScreenState extends State<LoginScreen> {
       backgroundColor: const Color(0xfffafafa),
 
       appBar: AppBar(
-          titleSpacing: 1,
           iconTheme: IconThemeData(color: Colors.white),
-          title: Text("Login", style: TextStyle(color: const Color(0xff434343), fontFamily: 'Roboto-Medium', fontSize: 20,)),
+          title: Text("Login", style: TextStyle(color: const Color(0xff434343), fontFamily: 'Roboto-Medium', fontSize: 20)),
           backgroundColor: const Color(0xffcfe9e5),
-          leading: Icon(Icons.dehaze, color: const Color(0xff434343))
+          leading: Icon(Icons.dehaze, color: const Color(0xff434343)),
       ),
 
       body: Form(
@@ -30,8 +30,6 @@ class _LoginScreenState extends State<LoginScreen> {
           children: <Widget>[
 
             SizedBox(height: 64.0),
-
-            Text("_formKey = $_formKey)"),
 
             Padding(
               padding: const EdgeInsets.only(
@@ -73,49 +71,70 @@ class _LoginScreenState extends State<LoginScreen> {
 
             SizedBox(height: 52.0),
 
-            MaterialButton(
-              color: const Color(0xff88c9bf),
-              textColor: const Color(0xff434343),
-              minWidth: 280,
-              height: 40,
-              child: Text("ENTRAR"),
-              onPressed: () => signIn(),
+            Column(
+              children: <Widget>[
+                Container(
+                    width: 280,
+                    child: MaterialButton(
+                      color: const Color(0xff88c9bf),
+                      textColor: const Color(0xff434343),
+                      minWidth: 280,
+                      height: 40,
+                      child: Text("ENTRAR"),
+                      onPressed: () => signIn(),
+                    )
+                ),
+              ],
             ),
 
             SizedBox(height: 72.0),
 
-
-            MaterialButton(
-                color: const Color(0xff194f7c),
-                textColor: Colors.white,
-                minWidth: 280,
-                height: 40,
-                child:
-                FlatButton.icon(
-                  icon: Icon(Icons.dehaze),
-                  label: Text("ENTRAR COM FACEBOOK"),
-                  textColor: Colors.white,
-                  onPressed: () => print("Entrar com Facebook"),
-                ),
-              onPressed: () => print("Entrar com Google"),
+            Column(
+              children: <Widget>[
+                Container(
+                  width: 280,
+                  child: MaterialButton(
+                        color: const Color(0xff194f7c),
+                        textColor: Colors.white,
+                        minWidth: 280,
+                        height: 40,
+                        child: FlatButton.icon(
+                          icon: Icon(Icons.dehaze),
+                          label: Text("ENTRAR COM FACEBOOK"),
+                          textColor: Colors.white,
+                          onPressed: () => print("Entrar com Facebook"),
+                        ),
+                      onPressed: () => print("Entrar com Google"),
+                    ),
+                  ),
+              ]
             ),
 
             SizedBox(height: 8.0),
 
-            MaterialButton(
-                color: const Color(0xfff15f5c),
-                textColor: Colors.white,
-                minWidth: 280,
-                height: 40,
-                child:
-                FlatButton.icon(
-                  icon: Icon(Icons.dehaze),
-                  label: Text("ENTRAR COM GOOGLE"),
-                  textColor: Colors.white,
-                  onPressed: () => print("Entrar com Google"),
+            Column(
+              children: <Widget>[
+                Container(
+                  width: 280,
+                  child: MaterialButton(
+                    color: const Color(0xfff15f5c),
+                    textColor: Colors.white,
+                    minWidth: 280,
+                    height: 40,
+                    child: FlatButton.icon(
+                      icon: Icon(Icons.dehaze),
+                      label: Text("ENTRAR COM GOOGLE"),
+                      textColor: Colors.white,
+                      onPressed: () {
+                        AuthService().googleSignIn();
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+                      }
+                    ),
+                    onPressed: () => print("Entrar com Google"),
+                  ),
                 ),
-              onPressed: () => print("Entrar com Google"),
-            )
+              ],
+            ),
           ],
         ),
       ),
@@ -135,5 +154,24 @@ class _LoginScreenState extends State<LoginScreen> {
       }
     }
   }
+/*
+  Future<void> googleSignIn() async {
+    final GoogleSignIn _googleSignIn = GoogleSignIn();
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+
+    GoogleSignInAccount googleUser = await _googleSignIn.signIn();
+    GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+    FirebaseUser user = await _auth.signInWithCredential(
+        GoogleAuthProvider.getCredential(
+            accessToken: googleAuth.accessToken,
+            idToken: googleAuth.idToken
+        )
+    );
+
+    //updateUserData(user);
+    print("signed in $user.displayName");
+    //loading.add(false);
+    Navigator.push(context, MaterialPageRoute(builder: (context) => Home(user: user)));
+  }*/
 }
 

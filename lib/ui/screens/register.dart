@@ -8,9 +8,8 @@ class Register extends StatelessWidget {
       backgroundColor: const Color(0xfffafafa),
 
       appBar: AppBar(
-          titleSpacing: 1,
           iconTheme: IconThemeData(color: Colors.white),
-          title: Text("Cadastro Pessoal", style: TextStyle(color: const Color(0xff434343), fontSize: 20, fontFamily: 'Roboto-Medium',)),
+          title: Text("Cadastro Pessoal", style: TextStyle(color: const Color(0xff434343), fontSize: 20, fontFamily: 'Roboto-Medium')),
           backgroundColor: const Color(0xffcfe9e5),
           leading: Icon(Icons.dehaze, color: const Color(0xff434343))
       ),
@@ -54,7 +53,7 @@ class Register extends StatelessWidget {
               padding: new EdgeInsets.only( left: 28.0),
               child:
                 Text("INFORMAÇÕES PESSOAIS",
-                  style: TextStyle(color: const Color(0xff88C9bf), fontFamily: 'Roboto-Regular', fontSize: 16,),
+                  style: TextStyle(color: const Color(0xff88C9bf), fontFamily: 'Roboto-Regular', fontSize: 16),
                   textAlign: TextAlign.left,),
             ),
 
@@ -163,7 +162,7 @@ class Register extends StatelessWidget {
               padding: new EdgeInsets.only( left: 28.0),
               child:
               Text("INFORMAÇÕES DE PERFIL",
-                style: TextStyle(color: const Color(0xff88C9bf), fontFamily: 'Roboto-Regular', fontSize: 16,),
+                style: TextStyle(color: const Color(0xff88C9bf), fontFamily: 'Roboto-Regular', fontSize: 16),
                 textAlign: TextAlign.left,),
             ),
 
@@ -216,8 +215,8 @@ class Register extends StatelessWidget {
               padding: new EdgeInsets.only( left: 28.0),
               child:
               Text("FOTO DE PERFIL",
-                style: TextStyle(color: const Color(0xff88C9bf), fontFamily: 'Roboto-Regular', fontSize: 16,),
-                textAlign: TextAlign.left,),
+                style: TextStyle(color: const Color(0xff88C9bf), fontFamily: 'Roboto-Regular', fontSize: 16),
+                textAlign: TextAlign.left),
             ),
 
             SizedBox(height: 32.0),
@@ -225,20 +224,19 @@ class Register extends StatelessWidget {
             Text("FOTO"),
             Column(
               children:<Widget>[
-            Container(
-              width: 232,
-              child:
-                MaterialButton(
-                  color: const Color(0xff88c9bf),
-                  textColor: const Color(0xff434343),
-                  minWidth: 8.0,
-                  height: 40,
-                  child: Text("FAZER CADASTRO"),
-                  onPressed: () => print("fazer cadastro"),
-                ),)])
-
-
-
+                Container(
+                  width: 232,
+                  child: MaterialButton(
+                    color: const Color(0xff88c9bf),
+                    textColor: const Color(0xff434343),
+                    minWidth: 8.0,
+                    height: 40,
+                    child: Text("FAZER CADASTRO"),
+                    onPressed: () => print("fazer cadastro"),
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
       ),
