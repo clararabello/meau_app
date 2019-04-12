@@ -31,8 +31,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
             SizedBox(height: 64.0),
 
-            Text("_formKey = $_formKey)"),
-
             Padding(
               padding: const EdgeInsets.only(
                 left: 20.0,
@@ -128,7 +126,7 @@ class _LoginScreenState extends State<LoginScreen> {
       formState.save();
       try {
         FirebaseUser user = await FirebaseAuth.instance.signInWithEmailAndPassword(email: _email, password: _password);
-        Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => Home(user: user)));
       }
       catch(e){
         print(e.message);

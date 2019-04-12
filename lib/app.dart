@@ -18,7 +18,7 @@ class MeauApp extends StatelessWidget {
         '/': (context) => Home(),
         '/home': (context) => Home(),
         '/login': (context) => LoginScreen(),
-        '/register': (context) => Register(),
+        '/register': (context) => RegisterScreen(),
 
       },
     );
