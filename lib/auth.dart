@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:first_project/session.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:rxdart/rxdart.dart';
@@ -77,7 +78,7 @@ class AuthService {
     print("signed out");
   }
 
-  Future<FirebaseUser> getCurrentUser() async => await _auth.currentUser();
+//  Future<FirebaseUser> getCurrentUser() async => await _auth.currentUser();
 }
 
 final AuthService authService = AuthService();

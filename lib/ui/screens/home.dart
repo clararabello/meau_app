@@ -22,12 +22,17 @@ class _HomeState extends State<Home> {
     return Scaffold(
       backgroundColor: const Color(0xfffafafa),
 
+      appBar:
+      new AppBar(
+      ),
+      drawer: returnBar(),
+
         body:
         Center(
           child: Column(
             children: <Widget>[
 
-            new FutureBuilder<FirebaseUser>(
+            /*new FutureBuilder<FirebaseUser>(
               future: widget.futureUser, // a Future<String> or null
               builder: (BuildContext context, AsyncSnapshot<FirebaseUser> snapshot) {
                 switch (snapshot.connectionState) {
@@ -40,9 +45,9 @@ class _HomeState extends State<Home> {
                       return new Text('Result: ${snapshot.data}');
                 }
               },
-            ),
+            ),*/
 
-            FlatButton(
+           /* FlatButton(
                 child: Text("logout"),
                 onPressed: () {
                   try {
@@ -52,14 +57,14 @@ class _HomeState extends State<Home> {
                     print("erro");
                   }
                 }
-            ),
+            ),*/
 
-            Container(    // icone de menu
+           /* Container(    // icone de menu
               height: 56,
               padding: new EdgeInsets.only(left: 12, top: 12),
               alignment: Alignment.topLeft,
               child: Icon(Icons.dehaze, color: const Color(0xff88c9bf),),
-            ),
+            ),*/
 
             Text( // texto "Olá!"
               'Olá!',
@@ -122,15 +127,18 @@ class _HomeState extends State<Home> {
                   /*FirebaseAuth.instance.onAuthStateChanged.listen((user) {
                     print(user);
                   });*/
-                  session.setCurrentUser();
+                 // session.setCurrentUser();
+                 // session.loadData();
+                  print(session.userData);
                   print("o usuario é ${session.currentUser.uid}");
+                  //List<QuerySnapshot> lista = Firestore.instance.collection("users").snapshots().toList();
+                 // print("aaaaaaaa + " + .toString());
                   widget.futureUser = FirebaseAuth.instance.currentUser();
                 });
               },
             ),
 
               SizedBox(height: 12.0),
-
 
               MaterialButton( // Botão ajudar
                 color: const Color(0xffffd358),
@@ -210,9 +218,9 @@ class _HomeState extends State<Home> {
         FlatButton( // link logout
           textColor: const Color(0xff88c9bf),
           onPressed: () {
-            //FirebaseAuth.instance.signOut();
-            //Navigator.pushNamed(context, '/userView');
-            Navigator.push(context, MaterialPageRoute(builder: (context) => UserView(user: widget.user)));
+             FirebaseAuth.instance.signOut();
+            Navigator.pushNamed(context, '/home');
+          //  Navigator.push(context, MaterialPageRoute(builder: (context) => UserView()));
           },
           child: Text("logout"),);
 
@@ -220,5 +228,41 @@ class _HomeState extends State<Home> {
       return SizedBox(height: 0);
     }
   }
+
+  Widget returnBar(){
+    if (session.currentUser == null){
+      return SizedBox(height: 0);}
+    else{
+      return new Drawer(
+          child: new Column(children: <Widget>[
+            new UserAccountsDrawerHeader(
+              accountName: Text(session.userData["name"]),
+              accountEmail: Text(session.currentUser.email),
+              currentAccountPicture: new CircleAvatar(
+                  backgroundColor: Colors.brown, child: new Text("FL")),
+            ),
+            new ListTile(
+              title: new Text('Meu perfil'),
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => UserView()));
+
+              },
+            ),
+            new Divider(),
+            new ListTile(
+              title: new Text('Home'),
+              onTap: () {
+                this.setState(() {
+                  Navigator.pushNamed(context, '/home');
+                });
+              },
+            ),
+            new Divider(),
+          ]
+          )
+      );
+    }
+  }
+
 }
 

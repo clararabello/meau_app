@@ -1,6 +1,7 @@
 import 'package:first_project/ui/screens/home.dart';
 import 'package:flutter/material.dart';
 import 'package:first_project/auth.dart';
+import 'package:first_project/session.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -83,6 +84,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         final formState = _formKey.currentState;
                         if (formState.validate()) formState.save();
                         AuthService().emailAndPasswordSignIn(_email, _password);
+                        session.setCurrentUser();
+                        session.loadData();
                         Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
                       }
                     )
@@ -136,6 +139,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     onPressed: () => print("Entrar com Google"),
                   ),
                 ),
+                FlatButton( // link login
+                  textColor: const Color(0xff88c9bf),
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/register');
+                  },
+                  child: Text("cadastrar conta")
+                )
               ],
             ),
           ],

@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:first_project/ui/screens/home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
-
+import 'package:first_project/session.dart';
 
 class UserView extends StatefulWidget {
   const UserView({Key key, this.user}) : super(key: key);
@@ -22,27 +21,12 @@ class _UserViewState extends State<UserView> {
 
       appBar:
       new AppBar(
-        title: returnName(widget.user.uid),
       ),
       drawer: new Drawer(
           child: new Column(children: <Widget>[
             new UserAccountsDrawerHeader(
-              accountName:
-                    StreamBuilder<DocumentSnapshot>(
-                stream: Firestore.instance
-                    .collection('users')
-                    .document(widget.user.uid)
-                    .snapshots(),
-              builder:
-                  (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-                if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
-                } else if (snapshot.hasData) {
-                  return Text(snapshot.data['name']);
-                }
-              },
-            ),
-              accountEmail: Text(widget.user.email),
+              accountName: Text(session.userData["name"]),
+              accountEmail: Text(session.currentUser.email),
               currentAccountPicture: new CircleAvatar(
                   backgroundColor: Colors.brown, child: new Text("FL")),
             ),
@@ -53,47 +37,65 @@ class _UserViewState extends State<UserView> {
 
               },
             ),
+            new Divider(),
             new ListTile(
-              title: new Text('Form 2'),
+              title: new Text('Home'),
               onTap: () {
                 this.setState(() {
-                  Text("Rola");
+                  Navigator.pushNamed(context, '/home');
                 });
               },
             ),
             new Divider(),
-            new ListTile(
-              title: new Text('About'),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
           ]
           )
       ),
 
 
-      body:
-        Text("rola"),
-
+      body: Center(
+        child: ListView(
+          children: <Widget>[
+            Text( // texto "Olá!"
+                "sad",
+                style: TextStyle(
+                    fontFamily: 'Roboto-Medium',
+                    fontSize: 16,
+                    color: const Color(0xff434343)
+                )),
+                returnName()
+          ])
+      )
     );
   }
 
-  Widget returnName(String user) {
-    StreamBuilder<DocumentSnapshot>(
+  Widget returnName(){
+    String kk="lola do joao";
+    //print("aaaaaaaa + " + Firestore.instance.collection("users").snapshots().toList().toString());
+    Firestore.instance
+        .collection('users')
+        .where("name", isEqualTo: "Koda nascimento")
+        .snapshots()
+        .listen((data) => data.documents.forEach((doc) => print("bbb " + doc["city"])));
+    return Text(kk);
+
+    //((snapshot) => snapshot.data["name"]);
+    //((snapshot) => print(snapshot.data["name"]));
+   /* StreamBuilder<DocumentSnapshot>(
       stream: Firestore.instance
           .collection('users')
-          .document(user)
+          .document(session.currentUser.uid)
           .snapshots(),
       builder:
           (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
         if (snapshot.hasError) {
-          return Text('Error: ${snapshot.error}');
+          return snapshot.error;
         } else if (snapshot.hasData) {
-          return Text(snapshot.data['name']);
+          return snapshot.data['name'];
         }
+        //return LinearProgressIndicator();
       },
-    );
+    );*/
   }
+
 }
 
