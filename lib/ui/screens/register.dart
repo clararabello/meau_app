@@ -284,7 +284,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         Firestore.instance.collection('users').document(user.uid)
             .setData({'username': nameController.text, 'age': ageController.text, 'state': stateController.text,
         'city': cityController.text, 'name': nameController.text, 'telehpone': telephoneController.text });
-        Navigator.push(context, MaterialPageRoute(builder: (context) => Home(user: user)));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
       }
       catch(e){
         print(e.message);

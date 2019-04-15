@@ -1,3 +1,4 @@
+import 'package:first_project/session.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'login.dart';
@@ -8,7 +9,9 @@ import 'package:first_project/ui/screens/userView.dart';
 
 
 class Home extends StatefulWidget {
-  Future<FirebaseUser> user = FirebaseAuth.instance.currentUser();
+  FirebaseUser user = session.currentUser;
+  Future<FirebaseUser> futureUser = FirebaseAuth.instance.currentUser();
+
   @override
   _HomeState createState() => _HomeState();
 }
@@ -25,7 +28,7 @@ class _HomeState extends State<Home> {
             children: <Widget>[
 
             new FutureBuilder<FirebaseUser>(
-              future: widget.user, // a Future<String> or null
+              future: widget.futureUser, // a Future<String> or null
               builder: (BuildContext context, AsyncSnapshot<FirebaseUser> snapshot) {
                 switch (snapshot.connectionState) {
                   case ConnectionState.none: return new Text('Press button to start');
@@ -64,10 +67,10 @@ class _HomeState extends State<Home> {
                   fontFamily: 'Courgette-Regular',
                   fontSize: 72,
                   color: const Color(0xffffd358)
-              ),
+              )),
               //Text(user.email)
 
-              StreamBuilder<DocumentSnapshot>(
+              /*StreamBuilder<DocumentSnapshot>(
               stream: Firestore.instance
                   .collection('users')
                   .document(widget.user.uid)
@@ -81,7 +84,7 @@ class _HomeState extends State<Home> {
                 }
                 //return LinearProgressIndicator();
               },
-            ),
+            ),*/
 
               SizedBox(height: 52.0),
 
@@ -119,7 +122,9 @@ class _HomeState extends State<Home> {
                   /*FirebaseAuth.instance.onAuthStateChanged.listen((user) {
                     print(user);
                   });*/
-                  widget.user = FirebaseAuth.instance.currentUser();
+                  session.setCurrentUser();
+                  print("o usuario é ${session.currentUser.uid}");
+                  widget.futureUser = FirebaseAuth.instance.currentUser();
                 });
               },
             ),
