@@ -44,13 +44,19 @@ class AuthService {
             accessToken: googleAuth.accessToken,
             idToken: googleAuth.idToken
         )
-    );
+    ).catchError((e) => print(e.message));
     // Step 3
     updateUserData(user);
 
     // Done
     loading.add(false);
     print("signed in " + user.displayName);
+    return user;
+  }
+
+  Future<void> emailAndPasswordSignIn(String email, String password) async {
+    FirebaseUser user = await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password).catchError((e) => print(e.message));
+    print("signed in " + email);
     return user;
   }
 
@@ -68,10 +74,10 @@ class AuthService {
 
   void signOut() {
     _auth.signOut();
+    print("signed out");
   }
 
-  void getUser() async {}
-
+  Future<FirebaseUser> getCurrentUser() async => await _auth.currentUser();
 }
 
 final AuthService authService = AuthService();

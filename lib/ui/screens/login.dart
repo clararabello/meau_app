@@ -1,7 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:first_project/ui/screens/home.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter/material.dart';
 import 'package:first_project/auth.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -81,7 +79,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       minWidth: 280,
                       height: 40,
                       child: Text("ENTRAR"),
-                      onPressed: () => signIn(),
+                      onPressed: () {
+                        final formState = _formKey.currentState;
+                        if (formState.validate()) formState.save();
+                        AuthService().emailAndPasswordSignIn(_email, _password);
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+                      }
                     )
                 ),
               ],
@@ -104,7 +107,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           textColor: Colors.white,
                           onPressed: () => print("Entrar com Facebook"),
                         ),
-                      onPressed: () => print("Entrar com Google"),
+                      onPressed: () => print("Entrar com Facebook"),
                     ),
                   ),
               ]
@@ -140,38 +143,5 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
-
-  Future<void> signIn() async {
-    final formState = _formKey.currentState;
-    if (formState.validate()) {
-      formState.save();
-      try {
-        FirebaseUser user = await FirebaseAuth.instance.signInWithEmailAndPassword(email: _email, password: _password);
-        Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
-      }
-      catch(e){
-        print(e.message);
-      }
-    }
-  }
-/*
-  Future<void> googleSignIn() async {
-    final GoogleSignIn _googleSignIn = GoogleSignIn();
-    final FirebaseAuth _auth = FirebaseAuth.instance;
-
-    GoogleSignInAccount googleUser = await _googleSignIn.signIn();
-    GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-    FirebaseUser user = await _auth.signInWithCredential(
-        GoogleAuthProvider.getCredential(
-            accessToken: googleAuth.accessToken,
-            idToken: googleAuth.idToken
-        )
-    );
-
-    //updateUserData(user);
-    print("signed in $user.displayName");
-    //loading.add(false);
-    Navigator.push(context, MaterialPageRoute(builder: (context) => Home(user: user)));
-  }*/
 }
 
