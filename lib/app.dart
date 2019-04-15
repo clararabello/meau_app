@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:first_project/ui/screens/login.dart';
 import 'package:first_project/ui/screens/home.dart';
 import 'package:first_project/ui/screens/register.dart';
+import 'package:first_project/ui/screens/userView.dart';
 
 
 class MeauApp extends StatelessWidget {
@@ -18,7 +19,8 @@ class MeauApp extends StatelessWidget {
         '/': (context) => Home(),
         '/home': (context) => Home(),
         '/login': (context) => LoginScreen(),
-        '/register': (context) => Register(),
+        '/register': (context) => RegisterScreen(),
+        '/userView:': (context) => UserView(),
 
       },
     );
