@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:first_project/ui/screens/userView.dart';
+
 
 class Home extends StatefulWidget {
   const Home({Key key, this.user}) : super(key: key);
@@ -39,21 +41,21 @@ class _HomeState extends State<Home> {
               ),
               //Text(user.email)
 
-              /*StreamBuilder<DocumentSnapshot>(
+              StreamBuilder<DocumentSnapshot>(
               stream: Firestore.instance
                   .collection('users')
-                  .document(user.uid)
+                  .document(widget.user.uid)
                   .snapshots(),
               builder:
                   (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
                 if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
                 } else if (snapshot.hasData) {
-                  return Text(snapshot.data['age']);
+                  return Text(snapshot.data['name']);
                 }
                 //return LinearProgressIndicator();
               },
-            ),*/
+            ),
 
               SizedBox(height: 52.0),
 
@@ -163,8 +165,9 @@ class _HomeState extends State<Home> {
         FlatButton( // link logout
           textColor: const Color(0xff88c9bf),
           onPressed: () {
-            FirebaseAuth.instance.signOut();
-            Navigator.pushNamed(context, '/home');
+            //FirebaseAuth.instance.signOut();
+            //Navigator.pushNamed(context, '/userView');
+            Navigator.push(context, MaterialPageRoute(builder: (context) => UserView(user: widget.user)));
           },
           child: Text("logout"),);
 
