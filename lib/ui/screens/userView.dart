@@ -21,19 +21,265 @@ class _UserViewState extends State<UserView> {
 
       appBar:
       new AppBar(
+        elevation: 0.0,
+        backgroundColor: const Color(0xffcfe9e5),
+        iconTheme: IconThemeData(color: const Color(0xff434343)),
+        title: Text("Meu perfil", style: TextStyle(color: const Color(0xff434343))),
       ),
-      drawer: new Drawer(
+
+      drawer: returnBar(),
+
+      body: Center(
+        child: ListView(
+          children: <Widget>[
+            Center(
+              child: Column(
+                children: <Widget>[
+                  SizedBox(height: 16),
+
+                  new Container(
+                      width: 112.0,
+                      height: 112.0,
+                      decoration: new BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: new DecorationImage(
+                              fit: BoxFit.fill,
+                              image: new NetworkImage("https://i.imgur.com/BoN9kdC.png")
+                          )
+                  )),
+
+                  SizedBox(height: 12),
+
+                  Text(session.userData["username"],
+                    style: TextStyle(
+                        fontFamily: 'Roboto-Medium',
+                        fontSize: 16,
+                      color: const Color(0xff434343)
+                    )
+                  ),
+
+                  SizedBox(height: 36),
+
+                  Text("NOME COMPLETO",
+                      style: TextStyle(
+                          fontFamily: 'Roboto-Regular',
+                          fontSize: 12,
+                          color: const Color(0xff88c9bf)
+                      )
+                  ),
+
+                  SizedBox(height: 8),
+
+
+                  Text(session.userData["name"],
+                      style: TextStyle(
+                          fontFamily: 'Roboto-Regular',
+                          fontSize: 14,
+                          color: const Color(0xff434343)
+                      )
+                  ),
+
+                  SizedBox(height: 36),
+
+                  Text("IDADE",
+                      style: TextStyle(
+                          fontFamily: 'Roboto-Regular',
+                          fontSize: 12,
+                          color: const Color(0xff88c9bf)
+                      )
+                  ),
+
+                  SizedBox(height: 8),
+
+
+                  Text("${session.userData["age"]} anos",
+                      style: TextStyle(
+                          fontFamily: 'Roboto-Regular',
+                          fontSize: 14,
+                          color: const Color(0xff434343)
+                      )
+                  ),
+
+                  SizedBox(height: 36),
+
+
+                  Text("EMAIL",
+                      style: TextStyle(
+                          fontFamily: 'Roboto-Regular',
+                          fontSize: 12,
+                          color: const Color(0xff88c9bf)
+                      )
+                  ),
+
+                  SizedBox(height: 8),
+
+
+                  Text(session.currentUser.email,
+                      style: TextStyle(
+                          fontFamily: 'Roboto-Regular',
+                          fontSize: 14,
+                          color: const Color(0xff434343)
+                      )
+                  ),
+
+                  SizedBox(height: 36),
+
+
+                  Text("LOCALIZAÇÃO",
+                      style: TextStyle(
+                          fontFamily: 'Roboto-Regular',
+                          fontSize: 12,
+                          color: const Color(0xff88c9bf)
+                      )
+                  ),
+
+                  SizedBox(height: 8),
+
+
+                  Text("${session.userData["city"]} - ${session.userData["state"]}",
+                      style: TextStyle(
+                          fontFamily: 'Roboto-Regular',
+                          fontSize: 14,
+                          color: const Color(0xff434343)
+                      )
+                  ),
+
+                  SizedBox(height: 36),
+
+
+                  Text("ENDEREÇO",
+                      style: TextStyle(
+                          fontFamily: 'Roboto-Regular',
+                          fontSize: 12,
+                          color: const Color(0xff88c9bf)
+                      )
+                  ),
+
+                  SizedBox(height: 8),
+
+
+                  Text(session.userData["address"],
+                      style: TextStyle(
+                          fontFamily: 'Roboto-Regular',
+                          fontSize: 14,
+                          color: const Color(0xff434343)
+                      )
+                  ),
+
+                  SizedBox(height: 36),
+
+
+                  Text("TELEFONE",
+                      style: TextStyle(
+                          fontFamily: 'Roboto-Regular',
+                          fontSize: 12,
+                          color: const Color(0xff88c9bf)
+                      )
+                  ),
+
+                  SizedBox(height: 8),
+
+
+                  Text(session.userData["telephone"],
+                      style: TextStyle(
+                          fontFamily: 'Roboto-Regular',
+                          fontSize: 14,
+                          color: const Color(0xff434343)
+                      )
+                  ),
+
+                  SizedBox(height: 36),
+
+
+                  Text("NOME DE USUÁRIO",
+                      style: TextStyle(
+                          fontFamily: 'Roboto-Regular',
+                          fontSize: 12,
+                          color: const Color(0xff88c9bf)
+                      )
+                  ),
+
+                  SizedBox(height: 8),
+
+
+                  Text(session.userData["username"],
+                      style: TextStyle(
+                          fontFamily: 'Roboto-Regular',
+                          fontSize: 14,
+                          color: const Color(0xff434343)
+                      )
+                  ),
+
+                  SizedBox(height: 36),
+
+
+                  Text("HISTÓRICO",
+                      style: TextStyle(
+                          fontFamily: 'Roboto-Regular',
+                          fontSize: 12,
+                          color: const Color(0xff88c9bf)
+                      )
+                  ),
+
+                  SizedBox(height: 8),
+
+
+                  Text("Adotou 1 gato",
+                      style: TextStyle(
+                          fontFamily: 'Roboto-Regular',
+                          fontSize: 14,
+                          color: const Color(0xff434343)
+                      )
+                  ),
+
+                  SizedBox(height: 32),
+
+                  MaterialButton(
+                      color: const Color(0xff88c9bf),
+                      textColor: const Color(0xff434343),
+                      minWidth: 280,
+                      height: 40,
+                      child: Text("EDITAR PERFIL"),
+                      onPressed: () => print("editar perfil")
+                  ),
+
+                  SizedBox(height: 24)
+
+                ],
+              ),
+            )
+          ])
+      )
+    );
+  }
+
+  Widget returnBar(){
+    if (session.currentUser == null){
+      return SizedBox(height: 0);
+    }
+    else{
+      return new Drawer(
           child: new Column(children: <Widget>[
             new UserAccountsDrawerHeader(
               accountName: Text(session.userData["name"]),
               accountEmail: Text(session.currentUser.email),
-              currentAccountPicture: new CircleAvatar(
-                  backgroundColor: Colors.brown, child: new Text("FL")),
+              currentAccountPicture: new Container(
+                  width: 112.0,
+                  height: 112.0,
+                  decoration: new BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: new DecorationImage(
+                          fit: BoxFit.fill,
+                          image: new NetworkImage("https://i.imgur.com/BoN9kdC.png")
+                      )
+                  )),
+              decoration: BoxDecoration(color: const Color(0xff88c9bf)),
             ),
+
             new ListTile(
               title: new Text('Meu perfil'),
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => UserView(user: widget.user)));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => UserView()));
 
               },
             ),
@@ -49,23 +295,8 @@ class _UserViewState extends State<UserView> {
             new Divider(),
           ]
           )
-      ),
-
-
-      body: Center(
-        child: ListView(
-          children: <Widget>[
-            Text( // texto "Olá!"
-                "sad",
-                style: TextStyle(
-                    fontFamily: 'Roboto-Medium',
-                    fontSize: 16,
-                    color: const Color(0xff434343)
-                )),
-                returnName()
-          ])
-      )
-    );
+      );
+    }
   }
 
   Widget returnName(){

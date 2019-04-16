@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:first_project/ui/screens/home.dart';
 import 'package:flutter/material.dart';
 import 'package:first_project/auth.dart';
@@ -84,9 +85,10 @@ class _LoginScreenState extends State<LoginScreen> {
                         final formState = _formKey.currentState;
                         if (formState.validate()) formState.save();
                         AuthService().emailAndPasswordSignIn(_email, _password);
-                        session.setCurrentUser();
-                        session.loadData();
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+
+                        startTime();
+
+//                        Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
                       }
                     )
                 ),
@@ -154,6 +156,15 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+  startTime() async {
+    var _duration = new Duration(seconds: 2);
+    return new Timer(_duration, navigationPage);
+  }
+
+  void navigationPage() {
+    session.setCurrentUser();
+    session.loadData();
+    Navigator.of(context).pushReplacementNamed('/home');
+  }
 
 }
-

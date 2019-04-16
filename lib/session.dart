@@ -17,10 +17,11 @@ class Session {
         .collection('users')
         .document(currentUser.uid).snapshots().listen((doc) {
             userData["age"] = doc["age"];
+            userData["address"] = doc["address"];
             userData["city"] = doc["city"];
             userData["name"] = doc["name"];
             userData["state"] = doc["state"];
-            userData["telephone"] = doc["telehpone"];
+            userData["telephone"] = doc["telephone"];
             userData["username"] = doc["username"];
         });
 //        .where("document", isEqualTo: currentUser.uid)
