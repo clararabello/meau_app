@@ -5,30 +5,31 @@ class Session {
   FirebaseUser currentUser;
   Map<String, String> userData = Map<String, String>();
 
-  setCurrentUser(){
+  setCurrentUser() {
     FirebaseAuth.instance.onAuthStateChanged.listen((user){
       currentUser = user;
+      print("Current user setted to ${currentUser.email} [${currentUser.uid}]");
     });
   }
 
   loadData() {
-
-    Firestore.instance
-        .collection('users')
-        .document(currentUser.uid).snapshots().listen((doc) {
-            userData["age"] = doc["age"];
-            userData["address"] = doc["address"];
-            userData["city"] = doc["city"];
-            userData["name"] = doc["name"];
-            userData["state"] = doc["state"];
-            userData["telephone"] = doc["telephone"];
-            userData["username"] = doc["username"];
-        });
-//        .where("document", isEqualTo: currentUser.uid)
-        /*.snapshots()
-        .listen((data) => data.documents.forEach((doc) {
-
-    }));*/
+    try {
+      Firestore.instance
+          .collection('users')
+          .document(currentUser.uid).snapshots().listen((doc) {
+        userData["age"] = doc["age"];
+        userData["address"] = doc["address"];
+        userData["city"] = doc["city"];
+        userData["name"] = doc["name"];
+        userData["state"] = doc["state"];
+        userData["telephone"] = doc["telephone"];
+        userData["username"] = doc["username"];
+      });//.onError((e) => print("erro: " + e.message));
+      print("Data from ${currentUser.email} loaded.");
+    }
+    catch(e) {
+      print("erro: " + e.toString());
+    }
   }
 }
 

@@ -300,7 +300,7 @@ class _UserViewState extends State<UserView> {
   }
 
   Widget returnName(){
-    String kk="lola do joao";
+    String kk="ops";
     //print("aaaaaaaa + " + Firestore.instance.collection("users").snapshots().toList().toString());
     Firestore.instance
         .collection('users')

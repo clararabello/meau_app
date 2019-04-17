@@ -2,10 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:first_project/ui/screens/home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:first_project/session.dart';
-
-
-
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key key, this.user}) : super(key: key);
@@ -23,7 +19,6 @@ TextEditingController addressController = new TextEditingController();
 TextEditingController stateController = new TextEditingController();
 TextEditingController cityController = new TextEditingController();
 TextEditingController usernameController = new TextEditingController();
-
 
 class _RegisterScreenState extends State<RegisterScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();

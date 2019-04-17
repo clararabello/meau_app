@@ -18,6 +18,13 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   @override
+  void initState() {
+    super.initState();
+    if(session.currentUser != null)
+      session.loadData();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xfffafafa),
@@ -116,17 +123,11 @@ class _HomeState extends State<Home> {
               height: 40,
               child: Text("ADOTAR"),
               onPressed: () {
+                //print(session.userData);
+                //print("o usuario é ${session.currentUser.uid}");
                 setState(() {
-                  /*FirebaseAuth.instance.onAuthStateChanged.listen((user) {
-                    print(user);
-                  });*/
-                 // session.setCurrentUser();
-                 // session.loadData();
-                  print(session.userData);
-                  print("o usuario é ${session.currentUser.uid}");
-                  //List<QuerySnapshot> lista = Firestore.instance.collection("users").snapshots().toList();
-                 // print("aaaaaaaa + " + .toString());
-                  widget.futureUser = FirebaseAuth.instance.currentUser();
+                  session.loadData();
+                  //widget.futureUser = FirebaseAuth.instance.currentUser();
                 });
               },
             ),
@@ -162,12 +163,13 @@ class _HomeState extends State<Home> {
 
               retorna_logout(context),
 
-              SizedBox(height: 68.0), //68.0
+              SizedBox(height: 68.0),
 
               Image.asset(
-                'assets/images/Meau_marca_2.png', alignment: Alignment.center,
-                width: 122,), // imagem meau
-
+                'assets/images/Meau_marca_2.png',
+                  alignment: Alignment.center,
+                  width: 122
+              ),
             ],
           ),
         ),
@@ -205,6 +207,7 @@ class _HomeState extends State<Home> {
     }
 
   Widget retorna_logout(BuildContext context) {
+    print("logout ${session.userData}");
     try {
       if (widget.user.email == null);
       return
@@ -223,9 +226,12 @@ class _HomeState extends State<Home> {
 
   Widget returnBar(){
     if (session.currentUser == null){
+      print("deu null");
       return SizedBox(height: 0);
     }
     else{
+      print("session ${session.userData}");
+      if (session.userData.isNotEmpty)
       return new Drawer(
           child: new Column(children: <Widget>[
             new UserAccountsDrawerHeader(
@@ -264,6 +270,8 @@ class _HomeState extends State<Home> {
           ]
           )
       );
+      else
+        return new SizedBox(height: 0,);
     }
   }
 

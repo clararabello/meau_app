@@ -84,8 +84,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       onPressed: () {
                         final formState = _formKey.currentState;
                         if (formState.validate()) formState.save();
-                        AuthService().emailAndPasswordSignIn(_email, _password);
-
+                        setState(() {
+                          AuthService().emailAndPasswordSignIn(_email, _password);
+                        });
                         startTime();
 
 //                        Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
@@ -157,14 +158,20 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   startTime() async {
-    var _duration = new Duration(seconds: 2);
-    return new Timer(_duration, navigationPage);
+    var _duration = new Duration(seconds: 3);
+    return new Timer(_duration, navigationPage2);
   }
 
-  void navigationPage() {
+  navigationPage() {
     session.setCurrentUser();
-    session.loadData();
+    var _duration = new Duration(seconds: 1);
+    return new Timer(_duration, navigationPage2);
+  }
+
+  void navigationPage2() {
+    //session.loadData();
     Navigator.of(context).pushReplacementNamed('/home');
+    //Navigator.popUntil(context, );
   }
 
 }
