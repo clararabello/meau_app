@@ -5,7 +5,7 @@ import 'login.dart';
 import 'package:first_project/auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:first_project/ui/screens/userView.dart';
+import 'package:first_project/ui/screens/user_view.dart';
 
 
 class Home extends StatefulWidget {

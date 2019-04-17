@@ -28,7 +28,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
       backgroundColor: const Color(0xfffafafa),
 
       appBar: AppBar(
-          titleSpacing: 1,
           iconTheme: IconThemeData(color: Colors.white),
           title: Text("Cadastro Pessoal", style: TextStyle(color: const Color(0xff434343), fontSize: 20, fontFamily: 'Roboto-Medium',)),
           backgroundColor: const Color(0xffcfe9e5),
