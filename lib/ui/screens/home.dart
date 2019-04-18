@@ -151,7 +151,8 @@ class _HomeState extends State<Home> {
                 minWidth: 232,
                 height: 40,
                 child: Text("CADASTRAR ANIMAL"),
-                onPressed: () => print("CADASTRAR"),
+                onPressed: () =>
+                    Navigator.pushNamed(context, '/animal_register'),
               ),
 
               SizedBox(height: 44.0),

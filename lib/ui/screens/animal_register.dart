@@ -1,25 +1,40 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:first_project/session.dart';
+import 'package:first_project/ui/screens/home.dart';
 import 'package:flutter/material.dart';
 import 'package:grouped_buttons/grouped_buttons.dart';
+import 'package:image_picker/image_picker.dart';
 
-TextEditingController nameController, speciesController, sexController, sizeController, ageController,
-                      temperController, healthController, adoptionDemandsController, aboutController = new TextEditingController();
+TextEditingController animalNameController  = new TextEditingController();
+TextEditingController healthController = new TextEditingController();
+TextEditingController aboutController = new TextEditingController();
+TextEditingController medicineController = new TextEditingController();
+TextEditingController objectController = new TextEditingController();
 
-final GlobalKey<FormState> _basicFormKey = GlobalKey<FormState>();
-final GlobalKey<FormState> _adoptionFormKey = GlobalKey<FormState>();
-final GlobalKey<FormState> _helpFormKey = GlobalKey<FormState>();
-final GlobalKey<FormState> _sponsorshipFormKey = GlobalKey<FormState>();
+
 
 class AnimalRegisterScreen extends StatefulWidget {
-  static _AnimalRegisterScreenState of(BuildContext context) => context.ancestorStateOfType(const TypeMatcher<_AnimalRegisterScreenState>());
+  //static _AnimalRegisterScreenState of(BuildContext context) => context.ancestorStateOfType(const TypeMatcher<_AnimalRegisterScreenState>());
   @override
   _AnimalRegisterScreenState createState() => _AnimalRegisterScreenState();
 }
 
 class _AnimalRegisterScreenState extends State<AnimalRegisterScreen> {
-  String _especie, _sexo, _porte, _idade;
-  List<String> _temperamento, _periodoAcompanhamento, _auxilioFinanceiro;
+  final GlobalKey<FormState> _basicFormKey = GlobalKey<FormState>();
+
+  File sampleImage;
+
+  Future getImage() async {
+    var tempImage = await ImagePicker.pickImage(source: ImageSource.gallery);
+
+  setState(() {
+  sampleImage = tempImage;
+  });}
+
+  String _especie, _sexo, _porte, _idade, _periodoAcompanhamento;
+  List<String> _temperamento, _auxilioFinanceiro;
   List<String> _saude = ['a'], _tipoCadastro = ['a'], _tiposAjuda = ['a'], _exigenciasAdocao = ['a'], _exigenciasApadrinhamento = ['a'];
 
   @override
@@ -29,7 +44,8 @@ class _AnimalRegisterScreenState extends State<AnimalRegisterScreen> {
           iconTheme: IconThemeData(color: Colors.white),
           title: Text("Cadastro do Animal", style: TextStyle(color: const Color(0xff434343), fontSize: 20, fontFamily: 'Roboto-Medium',)),
           backgroundColor: const Color(0xffffd358),
-          leading: Icon(Icons.arrow_back, color: const Color(0xff434343))
+          leading: IconButton(icon: BackButtonIcon(), onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Home())), color: const Color(0xff434343),),
+
       ),
       body: Container(
         padding: EdgeInsets.all(24.0),
@@ -60,6 +76,7 @@ class _AnimalRegisterScreenState extends State<AnimalRegisterScreen> {
               orientation: GroupedButtonsOrientation.VERTICAL,
               labels: <String>["ADOTAR", "AJUDAR", "APADRINHAR"],
               labelStyle: new TextStyle(color: const Color(0xffbdbdbd)),
+
               onSelected: (List selected) => setState((){
                 _tipoCadastro = selected;
                 print(_tipoCadastro);
@@ -76,6 +93,7 @@ class _AnimalRegisterScreenState extends State<AnimalRegisterScreen> {
                   hintText: 'Nome do animal',
                   hintStyle: new TextStyle(color: const Color(0xffbdbdbd), fontSize: 14)
               ),
+              controller: animalNameController,
             ),
             SizedBox(height: 20),
 
@@ -83,6 +101,14 @@ class _AnimalRegisterScreenState extends State<AnimalRegisterScreen> {
                 alignment: Alignment.centerLeft,
                 child: Text("FOTOS DO ANIMAL", style: new TextStyle(color: const Color(0xffffd358))),
             ),
+
+              new Center(
+                child: sampleImage == null ? Text('Select an image') : Text('uploaded'),
+              ),
+              FlatButton(
+                onPressed: getImage,
+                child: new Icon(Icons.add),
+              ), //
             SizedBox(height: 20),
 
             Container(
@@ -195,6 +221,7 @@ class _AnimalRegisterScreenState extends State<AnimalRegisterScreen> {
                   hintText: 'Compartilhe a história do animal',
                   hintStyle: new TextStyle(color: const Color(0xffbdbdbd), fontSize: 14)
               ),
+              controller: aboutController,
             ),
             SizedBox(height: 24),
 
@@ -203,7 +230,7 @@ class _AnimalRegisterScreenState extends State<AnimalRegisterScreen> {
               color: const Color(0xffffd358),
               minWidth: 232,
               height: 40,
-              onPressed: () => print("Cadastrar animal"),
+              onPressed: () => registerAnimal(),
             ),
           ])
         )
@@ -214,9 +241,7 @@ class _AnimalRegisterScreenState extends State<AnimalRegisterScreen> {
   Widget helpForm() {
     if(_tipoCadastro.contains('AJUDAR'))
       return
-          Form(
-            key: _helpFormKey,
-            child: Column(
+        Column(
               children: <Widget>[
                 Container(
                 alignment: Alignment.centerLeft,
@@ -237,7 +262,6 @@ class _AnimalRegisterScreenState extends State<AnimalRegisterScreen> {
                 callHelpFields(),
                 SizedBox(height: 24),
               ],
-            )
           );
     else
       return Text("");
@@ -245,9 +269,8 @@ class _AnimalRegisterScreenState extends State<AnimalRegisterScreen> {
 
   Widget adoptionForm() {
     if(_tipoCadastro.contains('ADOTAR'))
-      return Form(
-          key: _adoptionFormKey,
-          child: Column(
+      return
+        Column(
             children: <Widget>[
               SizedBox(height: 20),
               Container(
@@ -273,7 +296,6 @@ class _AnimalRegisterScreenState extends State<AnimalRegisterScreen> {
               ),
               callTrackingPeriodCheckboxes(),
             ],
-          )
       );
     else
       return Text("");
@@ -281,9 +303,8 @@ class _AnimalRegisterScreenState extends State<AnimalRegisterScreen> {
 
   Widget sponsorshipForm() {
     if(_tipoCadastro.contains('APADRINHAR'))
-      return Form(
-        key: _sponsorshipFormKey,
-        child: Column(
+      return
+        Column(
           children: <Widget>[
             Container(
             alignment: Alignment.centerLeft,
@@ -309,7 +330,6 @@ class _AnimalRegisterScreenState extends State<AnimalRegisterScreen> {
 
             callFinancialAidCheckboxes(),
           ],
-        ),
       );
     else
       return Text("");
@@ -324,6 +344,7 @@ class _AnimalRegisterScreenState extends State<AnimalRegisterScreen> {
                 hintText: 'Nome do medicamento',
                 hintStyle: new TextStyle(color: const Color(0xffbdbdbd), fontSize: 14)
             ),
+            controller: medicineController,
           ),
           SizedBox(height: 10),
           TextFormField(
@@ -331,6 +352,7 @@ class _AnimalRegisterScreenState extends State<AnimalRegisterScreen> {
                 hintText: 'Especifique o(s) objeto(s)',
                 hintStyle: new TextStyle(color: const Color(0xffbdbdbd), fontSize: 14)
             ),
+            controller: objectController,
           ),
         ],
       );
@@ -340,6 +362,7 @@ class _AnimalRegisterScreenState extends State<AnimalRegisterScreen> {
             hintText: 'Nome do medicamento',
             hintStyle: new TextStyle(color: const Color(0xffbdbdbd), fontSize: 14)
         ),
+        controller: medicineController,
       );
     else if (_tiposAjuda.contains("Objetos"))
       return TextFormField(
@@ -347,6 +370,7 @@ class _AnimalRegisterScreenState extends State<AnimalRegisterScreen> {
             hintText: 'Especifique o(s) objeto(s)',
             hintStyle: new TextStyle(color: const Color(0xffbdbdbd), fontSize: 14)
         ),
+        controller: objectController,
       );
     else
       return Text("");
@@ -359,21 +383,23 @@ class _AnimalRegisterScreenState extends State<AnimalRegisterScreen> {
             hintText: 'Doenças do animal',
             hintStyle: new TextStyle(color: const Color(0xffbdbdbd), fontSize: 14)
         ),
+        controller: healthController,
       );
-    else
-      return Text("");
+    else{
+      healthController.text = "";
+      return Text("");}
   }
 
   Widget callTrackingPeriodCheckboxes(){
     if (_exigenciasAdocao.contains("Acompanhamento pós-adoção"))
       return Padding(
         padding: EdgeInsets.all(20),
-        child: CheckboxGroup(
+        child: RadioButtonGroup(
           activeColor: const Color(0xffffd358),
           orientation: GroupedButtonsOrientation.VERTICAL,
           labels: <String>["1 mês", "3 meses", "6 meses"],
           labelStyle: new TextStyle(color: const Color(0xffbdbdbd)),
-          onSelected: (List selected) => setState((){
+          onSelected: (String selected) => setState((){
             _periodoAcompanhamento = selected;
             print(_periodoAcompanhamento);
           }),
@@ -402,19 +428,28 @@ class _AnimalRegisterScreenState extends State<AnimalRegisterScreen> {
       return Text("");
   }
 
-  Future<void> signUp() async {
-    final formState = _formKey.currentState;
+  Future<void> registerAnimal() async {
+    final formState = _basicFormKey.currentState;
     if (formState.validate()) {
       formState.save();
       try {
-        FirebaseUser user = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: emailController.text, password: passwordController.text);
-        Firestore.instance.collection('users').document(user.uid)
-            .setData({'username': nameController.text, 'age': ageController.text, 'state': stateController.text, 'address': addressController.text,
-          'city': cityController.text, 'name': nameController.text, 'telephone': telephoneController.text });
+        Firestore.instance.collection('animals').document()
+            .setData({'userUid': session.currentUser.uid, 'species': _especie, 'sex': _sexo, 'size': _porte,
+          'age': _idade, 'caracteristics': _temperamento, 'health': _saude,'animalName': animalNameController.text,
+          'illness': healthController.text, 'about': aboutController.text, 'helpOptions': _tiposAjuda,
+          'objects': objectController.text, 'medicine': medicineController.text, 'adoptionRequirements': _exigenciasAdocao,
+          'trackingPeriod': _periodoAcompanhamento, 'sponsorshipRequirements': _exigenciasApadrinhamento, 'finacialAid': _auxilioFinanceiro
+            });
+        animalNameController.text = "";
+        aboutController.text = "";
+        healthController.text = "";
+        objectController.text = "";
+        medicineController.text = "";
+
         Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
       }
       catch(e){
-        print(e.message);
+        print(e);
       }
     }
   }
