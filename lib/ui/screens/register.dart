@@ -278,7 +278,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       try {
         FirebaseUser user = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: emailController.text, password: passwordController.text);
         Firestore.instance.collection('users').document(user.uid)
-            .setData({'username': nameController.text, 'age': ageController.text, 'state': stateController.text, 'address': addressController.text,
+            .setData({'username': usernameController.text, 'age': ageController.text, 'state': stateController.text, 'address': addressController.text,
         'city': cityController.text, 'name': nameController.text, 'telephone': telephoneController.text });
         Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
       }

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:first_project/session.dart';
 import 'package:first_project/ui/screens/home.dart';
 import 'package:flutter/material.dart';
@@ -433,13 +434,15 @@ class _AnimalRegisterScreenState extends State<AnimalRegisterScreen> {
     if (formState.validate()) {
       formState.save();
       try {
-        Firestore.instance.collection('animals').document()
-            .setData({'userUid': session.currentUser.uid, 'species': _especie, 'sex': _sexo, 'size': _porte,
+       DocumentReference animal = Firestore.instance.collection('animals').document();
+           animal.setData({'userUid': session.currentUser.uid, 'species': _especie, 'sex': _sexo, 'size': _porte,
           'age': _idade, 'caracteristics': _temperamento, 'health': _saude,'animalName': animalNameController.text,
           'illness': healthController.text, 'about': aboutController.text, 'helpOptions': _tiposAjuda,
           'objects': objectController.text, 'medicine': medicineController.text, 'adoptionRequirements': _exigenciasAdocao,
           'trackingPeriod': _periodoAcompanhamento, 'sponsorshipRequirements': _exigenciasApadrinhamento, 'finacialAid': _auxilioFinanceiro
             });
+        final StorageReference firebaseStorageRef = FirebaseStorage.instance.ref().child(animal.documentID);
+        final StorageUploadTask task = firebaseStorageRef.putFile(sampleImage);
         animalNameController.text = "";
         aboutController.text = "";
         healthController.text = "";
