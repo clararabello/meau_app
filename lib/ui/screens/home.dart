@@ -24,6 +24,7 @@ class _HomeState extends State<Home> {
 
         body:
         Center(
+          child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
 
@@ -40,18 +41,6 @@ class _HomeState extends State<Home> {
                       return new Text('Result: ${snapshot.data}');
                 }
               },
-            ),
-
-            FlatButton(
-                child: Text("logout"),
-                onPressed: () {
-                  try {
-                    AuthService().signOut();
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()));
-                  } catch (e){
-                    print("erro");
-                  }
-                }
             ),
 
             Container(    // icone de menu
@@ -172,6 +161,19 @@ class _HomeState extends State<Home> {
 
               SizedBox(height: 44.0),
 
+            FlatButton(
+                child: Text("logout"),
+                onPressed: () {
+                  try {
+                    AuthService().signOut();
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()));
+                  } catch (e){
+                    print("erro");
+                  }
+                }
+            ),
+
+            SizedBox(height: 44.0),
 
               retorna_login(context),
 
@@ -187,6 +189,7 @@ class _HomeState extends State<Home> {
 
             ],
           ),
+        ),
         ),
       );
   }
