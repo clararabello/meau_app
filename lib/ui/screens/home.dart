@@ -5,6 +5,7 @@ import 'login.dart';
 import 'package:first_project/auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:first_project/ui/screens/userView.dart';
+import 'package:first_project/ui/screens/stories.dart';
 
 
 class Home extends StatefulWidget {
@@ -110,6 +111,24 @@ class _HomeState extends State<Home> {
 
               SizedBox(height: 48.0),
 
+            MaterialButton( // Botão histórias
+                color: const Color(0xffffd358),
+                textColor: const Color(0xff434343),
+                minWidth: 232,
+                height: 40,
+                child: Text("HISTÓRIAS DE ADOÇÃO"),
+                onPressed: () {
+                  try {
+                    AuthService().signOut();
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => AdoptionStories()));
+                  } catch (e){
+                    print("erro");
+                  }
+                }
+            ),
+
+            SizedBox(height: 12.0),
+
             MaterialButton( // Botão adotar
               color: const Color(0xffffd358),
               textColor: const Color(0xff434343),
@@ -132,13 +151,13 @@ class _HomeState extends State<Home> {
 
 
               MaterialButton( // Botão ajudar
-                color: const Color(0xffffd358),
-                textColor: const Color(0xff434343),
-                minWidth: 232,
-                height: 40,
-                child: Text("AJUDAR"),
-                onPressed: () => print("AJUDAR"),
-              ),
+              color: const Color(0xffffd358),
+              textColor: const Color(0xff434343),
+              minWidth: 232,
+              height: 40,
+              child: Text("AJUDAR"),
+              onPressed: () => print("AJUDAR"),
+            ),
 
               SizedBox(height: 12.0),
 
