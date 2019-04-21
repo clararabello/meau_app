@@ -1,4 +1,5 @@
 import 'package:first_project/session.dart';
+import 'package:first_project/ui/screens/animal_view.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'login.dart';
@@ -129,6 +130,7 @@ class _HomeState extends State<Home> {
                   session.loadData();
                   //widget.futureUser = FirebaseAuth.instance.currentUser();
                 });
+                Navigator.push(context, MaterialPageRoute(builder: (context) => AnimalView(animalId: "-LcxFfk_cyJ6oC5WS3hG")));
               },
             ),
 

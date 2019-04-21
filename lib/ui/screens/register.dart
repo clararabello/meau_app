@@ -34,7 +34,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           leading: Icon(Icons.dehaze, color: const Color(0xff434343))
       ),
 
-      body:Form(
+      body: Form(
         key: _formKey,
         child: ListView(
           children: <Widget>[

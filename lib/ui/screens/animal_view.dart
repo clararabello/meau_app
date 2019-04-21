@@ -1,18 +1,19 @@
+import 'package:first_project/ui/screens/user_view.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:first_project/ui/screens/home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:first_project/session.dart';
 
-class UserView extends StatefulWidget {
-  const UserView({Key key, this.user}) : super(key: key);
-  final FirebaseUser user;
+class AnimalView extends StatefulWidget {
+  final String animalId;
+  AnimalView({Key key, @required this.animalId}) : super(key: key);
+
   @override
-  _UserViewState createState() => _UserViewState();
+  _AnimalViewState createState() => _AnimalViewState();
 }
 
-class _UserViewState extends State<UserView> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+class _AnimalViewState extends State<AnimalView> {
+  Map<String, List<String>> animalData = Map<String, List<String>>();
+  Map<String, String> ownerData = Map<String, String>();
 
   @override
   Widget build(BuildContext context) {
@@ -29,227 +30,7 @@ class _UserViewState extends State<UserView> {
 
         drawer: returnBar(),
 
-        body: Center(
-            child: ListView(
-                children: <Widget>[
-                  Center(
-                    child: Column(
-                      children: <Widget>[
-                        SizedBox(height: 16),
-
-                        new Container(
-                            width: 112.0,
-                            height: 112.0,
-                            decoration: new BoxDecoration(
-                                shape: BoxShape.circle,
-                                image: new DecorationImage(
-                                    fit: BoxFit.fill,
-                                    image: new NetworkImage("https://i.imgur.com/BoN9kdC.png")
-                                )
-                            )),
-
-                        SizedBox(height: 12),
-
-                        Text(session.userData["username"],
-                            style: TextStyle(
-                                fontFamily: 'Roboto-Medium',
-                                fontSize: 16,
-                                color: const Color(0xff434343)
-                            )
-                        ),
-
-                        SizedBox(height: 36),
-
-                        Text("NOME COMPLETO",
-                            style: TextStyle(
-                                fontFamily: 'Roboto-Regular',
-                                fontSize: 12,
-                                color: const Color(0xff88c9bf)
-                            )
-                        ),
-
-                        SizedBox(height: 8),
-
-
-                        Text(session.userData["name"],
-                            style: TextStyle(
-                                fontFamily: 'Roboto-Regular',
-                                fontSize: 14,
-                                color: const Color(0xff434343)
-                            )
-                        ),
-
-                        SizedBox(height: 36),
-
-                        Text("IDADE",
-                            style: TextStyle(
-                                fontFamily: 'Roboto-Regular',
-                                fontSize: 12,
-                                color: const Color(0xff88c9bf)
-                            )
-                        ),
-
-                        SizedBox(height: 8),
-
-
-                        Text("${session.userData["age"]} anos",
-                            style: TextStyle(
-                                fontFamily: 'Roboto-Regular',
-                                fontSize: 14,
-                                color: const Color(0xff434343)
-                            )
-                        ),
-
-                        SizedBox(height: 36),
-
-
-                        Text("EMAIL",
-                            style: TextStyle(
-                                fontFamily: 'Roboto-Regular',
-                                fontSize: 12,
-                                color: const Color(0xff88c9bf)
-                            )
-                        ),
-
-                        SizedBox(height: 8),
-
-
-                        Text(session.currentUser.email,
-                            style: TextStyle(
-                                fontFamily: 'Roboto-Regular',
-                                fontSize: 14,
-                                color: const Color(0xff434343)
-                            )
-                        ),
-
-                        SizedBox(height: 36),
-
-
-                        Text("LOCALIZAÇÃO",
-                            style: TextStyle(
-                                fontFamily: 'Roboto-Regular',
-                                fontSize: 12,
-                                color: const Color(0xff88c9bf)
-                            )
-                        ),
-
-                        SizedBox(height: 8),
-
-
-                        Text("${session.userData["city"]} - ${session.userData["state"]}",
-                            style: TextStyle(
-                                fontFamily: 'Roboto-Regular',
-                                fontSize: 14,
-                                color: const Color(0xff434343)
-                            )
-                        ),
-
-                        SizedBox(height: 36),
-
-
-                        Text("ENDEREÇO",
-                            style: TextStyle(
-                                fontFamily: 'Roboto-Regular',
-                                fontSize: 12,
-                                color: const Color(0xff88c9bf)
-                            )
-                        ),
-
-                        SizedBox(height: 8),
-
-
-                        Text(session.userData["address"],
-                            style: TextStyle(
-                                fontFamily: 'Roboto-Regular',
-                                fontSize: 14,
-                                color: const Color(0xff434343)
-                            )
-                        ),
-
-                        SizedBox(height: 36),
-
-
-                        Text("TELEFONE",
-                            style: TextStyle(
-                                fontFamily: 'Roboto-Regular',
-                                fontSize: 12,
-                                color: const Color(0xff88c9bf)
-                            )
-                        ),
-
-                        SizedBox(height: 8),
-
-
-                        Text(session.userData["telephone"],
-                            style: TextStyle(
-                                fontFamily: 'Roboto-Regular',
-                                fontSize: 14,
-                                color: const Color(0xff434343)
-                            )
-                        ),
-
-                        SizedBox(height: 36),
-
-
-                        Text("NOME DE USUÁRIO",
-                            style: TextStyle(
-                                fontFamily: 'Roboto-Regular',
-                                fontSize: 12,
-                                color: const Color(0xff88c9bf)
-                            )
-                        ),
-
-                        SizedBox(height: 8),
-
-
-                        Text(session.userData["username"],
-                            style: TextStyle(
-                                fontFamily: 'Roboto-Regular',
-                                fontSize: 14,
-                                color: const Color(0xff434343)
-                            )
-                        ),
-
-                        SizedBox(height: 36),
-
-
-                        Text("HISTÓRICO",
-                            style: TextStyle(
-                                fontFamily: 'Roboto-Regular',
-                                fontSize: 12,
-                                color: const Color(0xff88c9bf)
-                            )
-                        ),
-
-                        SizedBox(height: 8),
-
-
-                        Text("Adotou 1 gato",
-                            style: TextStyle(
-                                fontFamily: 'Roboto-Regular',
-                                fontSize: 14,
-                                color: const Color(0xff434343)
-                            )
-                        ),
-
-                        SizedBox(height: 32),
-
-                        MaterialButton(
-                            color: const Color(0xff88c9bf),
-                            textColor: const Color(0xff434343),
-                            minWidth: 280,
-                            height: 40,
-                            child: Text("EDITAR PERFIL"),
-                            onPressed: () => print("editar perfil")
-                        ),
-
-                        SizedBox(height: 24)
-
-                      ],
-                    ),
-                  )
-                ])
-        )
+        body: callBody(),
     );
   }
 
@@ -299,34 +80,375 @@ class _UserViewState extends State<UserView> {
     }
   }
 
-  Widget returnName(){
-    String kk="ops";
-    //print("aaaaaaaa + " + Firestore.instance.collection("users").snapshots().toList().toString());
-    Firestore.instance
-        .collection('users')
-        .where("name", isEqualTo: "Koda nascimento")
-        .snapshots()
-        .listen((data) => data.documents.forEach((doc) => print("bbb " + doc["city"])));
-    return Text(kk);
+  Widget callBody() {
+    if (animalData.isEmpty) {
+      setState(() {
+        print("ta vazio");
+        loadAnimalData();
+      });
+    }
+    else {
+      return new Container(
+          child: ListView(
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.all(20),
+                  child: Column(
+                    children: <Widget>[
 
-    //((snapshot) => snapshot.data["name"]);
-    //((snapshot) => print(snapshot.data["name"]));
-    /* StreamBuilder<DocumentSnapshot>(
-      stream: Firestore.instance
-          .collection('users')
-          .document(session.currentUser.uid)
-          .snapshots(),
-      builder:
-          (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-        if (snapshot.hasError) {
-          return snapshot.error;
-        } else if (snapshot.hasData) {
-          return snapshot.data['name'];
-        }
-        //return LinearProgressIndicator();
-      },
-    );*/
+                      new Container(
+                          width: 112.0,
+                          height: 112.0,
+                          decoration: new BoxDecoration(
+                              shape: BoxShape.rectangle,
+                              image: new DecorationImage(
+                                  fit: BoxFit.fill,
+                                  image: new NetworkImage("https://i.imgur.com/BoN9kdC.png")
+                              )
+                          )),
+
+                      SizedBox(height: 12),
+
+                      Text(animalData["animalName"][0],
+                        style: TextStyle(
+                            fontFamily: 'Roboto-Medium',
+                            fontSize: 16,
+                            color: const Color(0xff434343)
+                        ),
+                        textAlign: TextAlign.left,
+                      ),
+                      SizedBox(height: 8),
+
+                      Row(
+                        children: <Widget>[
+                          Column(
+                            children: <Widget>[
+                              Text("SEXO",
+                                  style: TextStyle(
+                                      fontFamily: 'Roboto-Regular',
+                                      fontSize: 12,
+                                      color: const Color(0xff88c9bf)
+                                  )
+                              ),
+                              Text(animalData["sex"][0],
+                                  style: TextStyle(
+                                      fontFamily: 'Roboto-Regular',
+                                      fontSize: 14,
+                                      color: const Color(0xff434343)
+                                  )
+                              ),
+                            ],
+                          ),
+                          SizedBox(width: 20),
+                          Column(
+                            children: <Widget>[
+                              Text("PORTE",
+                                  style: TextStyle(
+                                      fontFamily: 'Roboto-Regular',
+                                      fontSize: 12,
+                                      color: const Color(0xff88c9bf)
+                                  )
+                              ),
+                              Text(animalData["size"][0],
+                                  style: TextStyle(
+                                      fontFamily: 'Roboto-Regular',
+                                      fontSize: 14,
+                                      color: const Color(0xff434343)
+                                  )
+                              ),
+                            ],
+                          ),
+                          SizedBox(width: 20),
+                          Column(
+                            children: <Widget>[
+                              Text("IDADE",
+                                  style: TextStyle(
+                                      fontFamily: 'Roboto-Regular',
+                                      fontSize: 12,
+                                      color: const Color(0xff88c9bf)
+                                  )
+                              ),
+                              Text(animalData["age"][0],
+                                  style: TextStyle(
+                                      fontFamily: 'Roboto-Regular',
+                                      fontSize: 14,
+                                      color: const Color(0xff434343)
+                                  )
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+
+                      SizedBox(height: 12),
+
+                      Column(
+                        children: <Widget>[
+                          Row(
+                            children: <Widget>[
+                              Text("LOCALIZAÇÃO",
+                                  style: TextStyle(
+                                      fontFamily: 'Roboto-Regular',
+                                      fontSize: 12,
+                                      color: const Color(0xff88c9bf)
+                                  )
+                              ),
+                            ],
+                          ),
+
+                          Row(
+                            children: <Widget>[
+                              Column(
+                                children: <Widget>[
+                                  Text("${ownerData["city"]} - ${ownerData["state"]}",
+                                      style: TextStyle(
+                                          fontFamily: 'Roboto-Regular',
+                                          fontSize: 14,
+                                          color: const Color(0xff434343)
+                                      )
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+
+                      SizedBox(height: 20),
+
+                      // --------------------------------------------------- //
+
+                      Row(
+                        children: <Widget>[
+                          Column(
+                            children: <Widget>[
+                              Text("CASTRADO",
+                                  style: TextStyle(
+                                      fontFamily: 'Roboto-Regular',
+                                      fontSize: 12,
+                                      color: const Color(0xff88c9bf)
+                                  )
+                              ),
+                              Text(animalData["health"].contains("Castrado") ? "Sim" : "Não",
+                                  style: TextStyle(
+                                      fontFamily: 'Roboto-Regular',
+                                      fontSize: 14,
+                                      color: const Color(0xff434343)
+                                  )
+                              ),
+                              SizedBox(height: 10),
+
+                              Text("VACINADO",
+                                  style: TextStyle(
+                                      fontFamily: 'Roboto-Regular',
+                                      fontSize: 12,
+                                      color: const Color(0xff88c9bf)
+                                  )
+                              ),
+                              Text(animalData["health"].contains("Vacinado") ? "Sim" : "Não",
+                                  style: TextStyle(
+                                      fontFamily: 'Roboto-Regular',
+                                      fontSize: 14,
+                                      color: const Color(0xff434343)
+                                  )
+                              ),
+                            ],
+                          ),
+                          SizedBox(width: 20),
+
+                          Column(
+                            children: <Widget>[
+                              Text("VERMIFUGADO",
+                                  style: TextStyle(
+                                      fontFamily: 'Roboto-Regular',
+                                      fontSize: 12,
+                                      color: const Color(0xff88c9bf)
+                                  )
+                              ),
+                              Text(animalData["health"].contains("Vermifugado") ? "Sim" : "Não",
+                                  style: TextStyle(
+                                      fontFamily: 'Roboto-Regular',
+                                      fontSize: 14,
+                                      color: const Color(0xff434343)
+                                  )
+                              ),
+                              SizedBox(height: 10),
+
+                              Text("DOENÇAS",
+                                  style: TextStyle(
+                                      fontFamily: 'Roboto-Regular',
+                                      fontSize: 12,
+                                      color: const Color(0xff88c9bf)
+                                  )
+                              ),
+                              Text(animalData["health"].contains("Doente") ? animalData["illness"][0] : "Nenhuma",
+                                  style: TextStyle(
+                                      fontFamily: 'Roboto-Regular',
+                                      fontSize: 14,
+                                      color: const Color(0xff434343)
+                                  )
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+
+                      SizedBox(height: 20),
+
+                      // ----------------------------------------------------//
+
+                      Column(
+                        children: <Widget>[
+                          Row(
+                            children: <Widget>[
+                              Text("TEMPERAMENTO",
+                                  style: TextStyle(
+                                      fontFamily: 'Roboto-Regular',
+                                      fontSize: 12,
+                                      color: const Color(0xff88c9bf)
+                                  )
+                              ),
+                            ],
+                          ),
+                          printCharacteristics(),
+                        ],
+                      ),
+                      SizedBox(height: 20),
+
+                      // ----------------------------------------------------//
+
+                      Column(
+                        children: <Widget>[
+                          Row(
+                            children: <Widget>[
+                              Text("EXIGÊNCIAS DO DOADOR",
+                                  style: TextStyle(
+                                      fontFamily: 'Roboto-Regular',
+                                      fontSize: 12,
+                                      color: const Color(0xff88c9bf)
+                                  )
+                              ),
+                            ],
+                          ),
+                          printRequirements(),
+                        ],
+                      ),
+                      SizedBox(height: 20),
+
+                      // ----------------------------------------------------//
+
+                      Column(
+                        children: <Widget>[
+                          Row(
+                            children: <Widget>[
+                              Text("MAIS SOBRE ${animalData["animalName"][0].toUpperCase()}",
+                                  style: TextStyle(
+                                      fontFamily: 'Roboto-Regular',
+                                      fontSize: 12,
+                                      color: const Color(0xff88c9bf)
+                                  )
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: <Widget>[
+                              Container(
+                                width: MediaQuery.of(context).size.width*0.8,
+                                child: Text(animalData["about"][0],
+                                  style: TextStyle(
+                                      fontFamily: 'Roboto-Regular',
+                                      fontSize: 14,
+                                      color: const Color(0xff434343)
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 20),
+
+                      MaterialButton(
+                          color: const Color(0xff88c9bf),
+                          textColor: const Color(0xff434343),
+                          minWidth: 280,
+                          height: 40,
+                          child: Text("EDITAR PERFIL"),
+                          onPressed: () {
+                            setState(() {
+                              loadAnimalData();
+                            });
+                          }
+                      ),
+
+                      SizedBox(height: 24)
+
+                    ],
+                  ),
+                )
+              ])
+      );
+    }
   }
 
+  // TODO - arrumar forma de buscar dados do BD (sempre retorna null sem hot reload)
+  loadAnimalData(){
+    print("Trying to load animal data...");
+    try {
+      Firestore.instance
+          .collection('animals')
+          .document(widget.animalId).snapshots().listen((doc) {
+            animalData["about"] = [doc["about"]];
+            doc["adoptionRequirements"] != null ? animalData["adoptionRequirements"] = doc["adoptionRequirements"].cast<String>() : animalData["adoptionRequirements"] = [""];
+            animalData["age"] = [doc["age"]];
+            animalData["animalName"] = [doc["animalName"]];
+            doc["characteristics"] != null ? animalData["characteristics"] = doc["characteristics"].cast<String>() : animalData["characteristics"] = [""];
+            doc["financialAid"] != null ? animalData["financialAid"] = doc["financialAid"].cast<String>() : animalData["financialAid"] = [""];
+            doc["health"] != null ? animalData["health"] = doc["health"].cast<String>() : animalData["health"] = [""];
+            doc["helpOptions"] != null ? animalData["helpOptions"] = doc["helpOptions"].cast<String>() : animalData["helpOptions"] = [""];
+            animalData["illness"] = [doc["illness"]];
+            animalData["medicine"] = [doc["medicine"]];
+            animalData["objects"] = [doc["objects"]];
+            animalData["sex"] = [doc["sex"]];
+            animalData["size"] = [doc["size"]];
+            animalData["species"] = [doc["species"]];
+            doc["sponsorshipRequirements"] != null ? animalData["sponsorshipRequirements"] = doc["sponsorshipRequirements"].cast<String>() : animalData["sponsorshipRequirements"] = [""];
+            animalData["trackingPeriod"] = [doc["trackingPeriod"]];
+            animalData["userUid"] = [doc["userUid"]];
+          });
+
+      Firestore.instance
+        .collection('users')
+        .document(animalData["userUid"][0]).snapshots().listen((user) {
+          ownerData["city"] = user["city"];
+          ownerData["state"] = user["state"];
+        });
+
+      print("Data from ${animalData["animalName"][0]} loaded.");
+    }
+    catch(e) {
+      print("Error loading data from animal: " + e.toString());
+    }
+  }
+
+  Widget printCharacteristics() {
+    return new Column(children: animalData["characteristics"].map((item) => new Row(children: <Widget> [new Text(item,
+        style: TextStyle(
+            fontFamily: 'Roboto-Regular',
+            fontSize: 14,
+            color: const Color(0xff434343)
+        )
+    )])).toList());
+  }
+
+  Widget printRequirements() {
+    return new Column(children: animalData["adoptionRequirements"].map((item) => new Row(children: <Widget> [new Text(item,
+        style: TextStyle(
+            fontFamily: 'Roboto-Regular',
+            fontSize: 14,
+            color: const Color(0xff434343)
+        )
+    )])).toList());
+  }
 }
 

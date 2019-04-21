@@ -436,11 +436,13 @@ class _AnimalRegisterScreenState extends State<AnimalRegisterScreen> {
       try {
        DocumentReference animal = Firestore.instance.collection('animals').document();
            animal.setData({'userUid': session.currentUser.uid, 'species': _especie, 'sex': _sexo, 'size': _porte,
-          'age': _idade, 'caracteristics': _temperamento, 'health': _saude,'animalName': animalNameController.text,
-          'illness': healthController.text, 'about': aboutController.text, 'helpOptions': _tiposAjuda,
-          'objects': objectController.text, 'medicine': medicineController.text, 'adoptionRequirements': _exigenciasAdocao,
-          'trackingPeriod': _periodoAcompanhamento, 'sponsorshipRequirements': _exigenciasApadrinhamento, 'finacialAid': _auxilioFinanceiro
+             'age': _idade, 'characteristics': _temperamento, 'health': _saude == ["a"] ? [""] : _saude, 'animalName': animalNameController.text,
+             'illness': healthController.text, 'about': aboutController.text, 'helpOptions': _tiposAjuda == ["a"] ? [""] : _tiposAjuda,
+             'objects': objectController.text, 'medicine': medicineController.text, 'adoptionRequirements': _exigenciasAdocao == ["a"] ? [""] : _exigenciasAdocao,
+             'trackingPeriod': _periodoAcompanhamento, 'sponsorshipRequirements': _exigenciasApadrinhamento == ["a"] ? [""] : _exigenciasApadrinhamento,
+             'financialAid': _auxilioFinanceiro, 'registerType': _tipoCadastro == ["a"] ? [""] : _tipoCadastro
             });
+
         final StorageReference firebaseStorageRef = FirebaseStorage.instance.ref().child(animal.documentID);
         final StorageUploadTask task = firebaseStorageRef.putFile(sampleImage);
         animalNameController.text = "";
