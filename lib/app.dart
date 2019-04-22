@@ -1,3 +1,4 @@
+import 'package:first_project/ui/screens/animal_index.dart';
 import 'package:first_project/ui/screens/animal_register.dart';
 import 'package:flutter/material.dart';
 import 'package:first_project/ui/screens/login.dart';
@@ -22,6 +23,7 @@ class MeauApp extends StatelessWidget {
         '/register': (context) => RegisterScreen(),
         '/user_view:': (context) => UserView(),
         '/animal_register': (context) => AnimalRegisterScreen(),
+        '/animal_index': (context) => AnimalIndexScreen(),
 
       },
     );

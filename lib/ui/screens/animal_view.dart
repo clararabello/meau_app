@@ -20,7 +20,7 @@ class _AnimalViewState extends State<AnimalView> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: getAnimal(),
+      stream: loadAnimalData(),
       builder: (context, snapshot) {
         if (snapshot.hasData)
           return Scaffold(
@@ -409,70 +409,12 @@ class _AnimalViewState extends State<AnimalView> {
     }
   }
 
-  getAnimal() {
+  loadAnimalData() {
     return Firestore.instance
         .collection('animals')
         .document(widget.animalId)
         .snapshots()
         .map((snap) => snap.data);
-  }
-
-  // TODO - arrumar forma de buscar dados do BD (sempre retorna null sem hot reload)
-  loadAnimalData() async {
-    print("Trying to load animal data...");
-    try {
-      Firestore.instance
-          .collection('animals')
-          .document(widget.animalId)
-          .snapshots()
-          .listen((doc) {
-        animalData["about"] = [doc["about"]];
-        doc["adoptionRequirements"] != null
-            ? animalData["adoptionRequirements"] =
-                doc["adoptionRequirements"].cast<String>()
-            : animalData["adoptionRequirements"] = [""];
-        animalData["age"] = [doc["age"]];
-        animalData["animalName"] = [doc["animalName"]];
-        doc["characteristics"] != null
-            ? animalData["characteristics"] =
-                doc["characteristics"].cast<String>()
-            : animalData["characteristics"] = [""];
-        doc["financialAid"] != null
-            ? animalData["financialAid"] = doc["financialAid"].cast<String>()
-            : animalData["financialAid"] = [""];
-        doc["health"] != null
-            ? animalData["health"] = doc["health"].cast<String>()
-            : animalData["health"] = [""];
-        doc["helpOptions"] != null
-            ? animalData["helpOptions"] = doc["helpOptions"].cast<String>()
-            : animalData["helpOptions"] = [""];
-        animalData["illness"] = [doc["illness"]];
-        animalData["medicine"] = [doc["medicine"]];
-        animalData["objects"] = [doc["objects"]];
-        animalData["sex"] = [doc["sex"]];
-        animalData["size"] = [doc["size"]];
-        animalData["species"] = [doc["species"]];
-        doc["sponsorshipRequirements"] != null
-            ? animalData["sponsorshipRequirements"] =
-                doc["sponsorshipRequirements"].cast<String>()
-            : animalData["sponsorshipRequirements"] = [""];
-        animalData["trackingPeriod"] = [doc["trackingPeriod"]];
-        animalData["userUid"] = [doc["userUid"]];
-      });
-
-      // retorna o stream : Firestore.instance.collection('animals').document(widget.animalId).snapshots().map((snap) => snap.data);
-
-      /*Firestore.instance
-        .collection('users')
-        .document(animalData["userUid"][0]).snapshots().listen((user) {
-          ownerData["city"] = user["city"];
-          ownerData["state"] = user["state"];
-        });*/
-
-      print("Data from ${animalData["animalName"][0]} loaded.");
-    } catch (e) {
-      print("Error loading data from animal: " + e.toString());
-    }
   }
 
   Widget printCharacteristics() {

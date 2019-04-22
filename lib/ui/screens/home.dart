@@ -7,6 +7,8 @@ import 'package:first_project/auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:first_project/ui/screens/user_view.dart';
+import 'package:first_project/ui/screens/animal_index.dart';
+
 
 
 class Home extends StatefulWidget {
@@ -130,7 +132,7 @@ class _HomeState extends State<Home> {
                   session.loadData();
                   //widget.futureUser = FirebaseAuth.instance.currentUser();
                 });
-                Navigator.push(context, MaterialPageRoute(builder: (context) => AnimalView(animalId: "-LcxFfk_cyJ6oC5WS3hG")));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => AnimalIndexScreen()));
               },
             ),
 
