@@ -190,7 +190,7 @@ class _HomeState extends State<Home> {
           onPressed: () {
             Navigator.pushNamed(context, '/login');
           },
-          child: Text("login"),);
+          child: Text("login"));
       }
     }
 

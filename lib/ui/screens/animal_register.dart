@@ -102,14 +102,13 @@ class _AnimalRegisterScreenState extends State<AnimalRegisterScreen> {
                 alignment: Alignment.centerLeft,
                 child: Text("FOTOS DO ANIMAL", style: new TextStyle(color: const Color(0xffffd358))),
             ),
-
-              new Center(
-                child: sampleImage == null ? Text('Select an image') : Text('uploaded'),
-              ),
-              FlatButton(
-                onPressed: getImage,
-                child: new Icon(Icons.add),
-              ), //
+            new Center(
+              child: sampleImage == null ? Text('Select an image') : Text('uploaded'),
+            ),
+            FlatButton(
+              onPressed: getImage,
+              child: new Icon(Icons.add),
+            ), //
             SizedBox(height: 20),
 
             Container(
