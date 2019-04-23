@@ -1,3 +1,4 @@
+import 'package:first_project/ui/screens/animal_index.dart';
 import 'package:first_project/ui/screens/home.dart';
 import 'package:first_project/ui/screens/user_view.dart';
 import 'package:flutter/material.dart';
@@ -36,7 +37,7 @@ class _AnimalViewState extends State<AnimalView> {
                 backgroundColor: const Color(0xffffd358),
                 leading: IconButton(icon: BackButtonIcon(),
                   color: const Color(0xff434343),
-                  onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Home())),
+                  onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => AnimalIndexScreen())),
               )),
 
               drawer: returnBar(),
@@ -54,7 +55,7 @@ class _AnimalViewState extends State<AnimalView> {
                                         fit: BoxFit.fitWidth,
                                         alignment: FractionalOffset.topCenter,
                                         image: new NetworkImage(
-                                            "https://clubeparacachorros.com.br/wp-content/uploads/2016/01/golden-retriever-baba.png")))
+                                            snapshot.data["url"])))
                             ),
 
                             Padding(
@@ -147,7 +148,7 @@ class _AnimalViewState extends State<AnimalView> {
                                           Column(
                                             children: <Widget>[
                                               Text(
-                                                  "${ownerData["city"]} - ${ownerData["state"]}",
+                                                  "${snapshot.data["neighbourhood"]} - ${snapshot.data["state"]}",
                                                   style: TextStyle(
                                                       fontFamily: 'Roboto-Regular',
                                                       fontSize: 14,

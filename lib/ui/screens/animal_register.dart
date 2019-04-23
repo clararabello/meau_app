@@ -13,8 +13,8 @@ TextEditingController healthController = new TextEditingController();
 TextEditingController aboutController = new TextEditingController();
 TextEditingController medicineController = new TextEditingController();
 TextEditingController objectController = new TextEditingController();
-
-
+TextEditingController neighbourhoodController = new TextEditingController();
+TextEditingController stateController = new TextEditingController();
 
 class AnimalRegisterScreen extends StatefulWidget {
   //static _AnimalRegisterScreenState of(BuildContext context) => context.ancestorStateOfType(const TypeMatcher<_AnimalRegisterScreenState>());
@@ -102,13 +102,34 @@ class _AnimalRegisterScreenState extends State<AnimalRegisterScreen> {
                 alignment: Alignment.centerLeft,
                 child: Text("FOTOS DO ANIMAL", style: new TextStyle(color: const Color(0xffffd358))),
             ),
-            new Center(
-              child: sampleImage == null ? Text('Select an image') : Text('uploaded'),
+
+            SizedBox(height: 10),
+            new GestureDetector(
+              child: new Container(
+                width: 400,
+                height: 150,
+                color: const Color(0xfff1f2f2),
+                child:
+                  sampleImage == null ?
+                    Column(
+                      children: <Widget>[
+                        SizedBox(height: 50),
+                        Icon(Icons.control_point, color: const Color(0xff757575)),
+                        Text("adicionar fotos")
+                      ],
+                    )
+                  :
+                    Column(
+                      children: <Widget>[
+                        SizedBox(height: 50),
+                        Icon(Icons.check_circle_outline, color: const Color(0xff757575)),
+                        Text("imagem adicionada!")
+                      ],
+                    )
+              ),
+              onTap: getImage,
             ),
-            FlatButton(
-              onPressed: getImage,
-              child: new Icon(Icons.add),
-            ), //
+
             SizedBox(height: 20),
 
             Container(
@@ -206,6 +227,27 @@ class _AnimalRegisterScreenState extends State<AnimalRegisterScreen> {
               }),
             ),
             callIllnessesTextField(),
+
+            Container(
+              alignment: Alignment.centerLeft,
+              child: Text("LOCALIZAÇÃO", style: new TextStyle(color: const Color(0xffffd358))),
+            ),
+            SizedBox(height: 5),
+            TextFormField(
+              decoration: InputDecoration(
+                  hintText: 'Bairro',
+                  hintStyle: new TextStyle(color: const Color(0xffbdbdbd), fontSize: 14)
+              ),
+              controller: neighbourhoodController,
+            ),
+            SizedBox(height: 10),
+            TextFormField(
+              decoration: InputDecoration(
+                  hintText: 'Estado',
+                  hintStyle: new TextStyle(color: const Color(0xffbdbdbd), fontSize: 14)
+              ),
+              controller: stateController,
+            ),
 
             // forms extras
             adoptionForm(),
@@ -434,21 +476,25 @@ class _AnimalRegisterScreenState extends State<AnimalRegisterScreen> {
       formState.save();
       try {
        DocumentReference animal = Firestore.instance.collection('animals').document();
-           animal.setData({'userUid': session.currentUser.uid, 'species': _especie, 'sex': _sexo, 'size': _porte,
+       final StorageReference firebaseStorageRef = FirebaseStorage.instance.ref().child(animal.documentID);
+       final StorageUploadTask task = firebaseStorageRef.putFile(sampleImage);
+       var photoUrl = await (await task.onComplete).ref.getDownloadURL();
+
+       animal.setData({'userUid': session.currentUser.uid, 'species': _especie, 'sex': _sexo, 'size': _porte,
              'age': _idade, 'characteristics': _temperamento, 'health': _saude == ["a"] ? [""] : _saude, 'animalName': animalNameController.text,
              'illness': healthController.text, 'about': aboutController.text, 'helpOptions': _tiposAjuda == ["a"] ? [""] : _tiposAjuda,
              'objects': objectController.text, 'medicine': medicineController.text, 'adoptionRequirements': _exigenciasAdocao == ["a"] ? [""] : _exigenciasAdocao,
              'trackingPeriod': _periodoAcompanhamento, 'sponsorshipRequirements': _exigenciasApadrinhamento == ["a"] ? [""] : _exigenciasApadrinhamento,
-             'financialAid': _auxilioFinanceiro, 'registerType': _tipoCadastro == ["a"] ? [""] : _tipoCadastro
-            });
+             'financialAid': _auxilioFinanceiro, 'registerType': _tipoCadastro == ["a"] ? [""] : _tipoCadastro, 'neighbourhood': neighbourhoodController.text,
+             'state': stateController.text, 'url': photoUrl.toString()
+           });
 
-        final StorageReference firebaseStorageRef = FirebaseStorage.instance.ref().child(animal.documentID);
-        final StorageUploadTask task = firebaseStorageRef.putFile(sampleImage);
         animalNameController.text = "";
         aboutController.text = "";
         healthController.text = "";
         objectController.text = "";
-        medicineController.text = "";
+        stateController.text = "";
+        neighbourhoodController.text = "";
 
         Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
       }
