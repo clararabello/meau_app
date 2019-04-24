@@ -1,5 +1,6 @@
 import 'package:first_project/session.dart';
 import 'package:first_project/ui/screens/animal_view.dart';
+import 'package:first_project/ui/screens/stories.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'login.dart';
@@ -65,7 +66,7 @@ class _HomeState extends State<Home> {
               padding: new EdgeInsets.only(left: 12, top: 12),
               alignment: Alignment.topLeft,
               child: Icon(Icons.dehaze, color: const Color(0xff88c9bf),),
-            ),*/
+            ),
 
             Text( // texto "Olá!"
               'Olá!',
