@@ -19,10 +19,13 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  firebase_storage:
+  image_picker:
   firebase_core: ^0.3.0
   firebase_auth: ^0.8.4+2
   cloud_firestore: ^0.9.13+1
   google_sign_in: ^3.2.4
+  grouped_buttons: ^1.0.4
 
   rxdart: 0.20.0
 
