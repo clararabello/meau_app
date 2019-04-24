@@ -21,13 +21,6 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   @override
-  void initState() {
-    super.initState();
-    if(session.currentUser != null)
-      session.loadData();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xfffafafa),
@@ -60,13 +53,7 @@ class _HomeState extends State<Home> {
                 }
               },
             ),*/
-              
-            Container(    // icone de menu
-              height: 56,
-              padding: new EdgeInsets.only(left: 12, top: 12),
-              alignment: Alignment.topLeft,
-              child: Icon(Icons.dehaze, color: const Color(0xff88c9bf),),
-            ),
+
 
             Text( // texto "Olá!"
               'Olá!',
@@ -108,7 +95,7 @@ class _HomeState extends State<Home> {
 
               SizedBox(height: 48.0),
 
-            MaterialButton( // Botão histórias
+            /*MaterialButton( // Botão histórias
                 color: const Color(0xffffd358),
                 textColor: const Color(0xff434343),
                 minWidth: 232,
@@ -122,7 +109,7 @@ class _HomeState extends State<Home> {
                     print("erro");
                   }
                 }
-            ),
+            ),*/
 
             SizedBox(height: 12.0),
 
@@ -165,20 +152,6 @@ class _HomeState extends State<Home> {
                 onPressed: () =>
                     Navigator.pushNamed(context, '/animal_register'),
               ),
-
-              SizedBox(height: 44.0),
-
-            FlatButton(
-                child: Text("logout"),
-                onPressed: () {
-                  try {
-                    AuthService().signOut();
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()));
-                  } catch (e){
-                    print("erro");
-                  }
-                }
-            ),
 
             SizedBox(height: 44.0),
 
@@ -233,9 +206,8 @@ class _HomeState extends State<Home> {
     }
 
   Widget retorna_logout(BuildContext context) {
-    print("logout ${session.userData}");
     try {
-      if (widget.user.email == null);
+      if (widget.user.email == null){}
       return
         FlatButton( // link logout
           textColor: const Color(0xff88c9bf),
@@ -252,11 +224,18 @@ class _HomeState extends State<Home> {
 
   Widget returnBar(){
     if (session.currentUser == null){
-      print("deu null");
-      return SizedBox(height: 0);
+      return new Drawer(
+          child: new Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+            Center(
+              child: Text("Você ainda não está logado :'("),
+            )
+          ])
+      );
     }
     else{
-      print("session ${session.userData}");
       if (session.userData.isNotEmpty)
       return new Drawer(
           child: new Column(children: <Widget>[
@@ -300,6 +279,8 @@ class _HomeState extends State<Home> {
         return new SizedBox(height: 0,);
     }
   }
+
+
 
 }
 

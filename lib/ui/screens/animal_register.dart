@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:first_project/session.dart';
+import 'package:first_project/ui/screens/dialogs.dart';
 import 'package:first_project/ui/screens/home.dart';
 import 'package:flutter/material.dart';
 import 'package:grouped_buttons/grouped_buttons.dart';
@@ -24,7 +25,7 @@ class AnimalRegisterScreen extends StatefulWidget {
 
 class _AnimalRegisterScreenState extends State<AnimalRegisterScreen> {
   final GlobalKey<FormState> _basicFormKey = GlobalKey<FormState>();
-
+  Dialogs dialogs = new Dialogs();
   File sampleImage;
 
   Future getImage() async {
@@ -90,6 +91,10 @@ class _AnimalRegisterScreenState extends State<AnimalRegisterScreen> {
               child: Text("NOME DO ANIMAL", style: new TextStyle(color: const Color(0xffffd358))),
             ),
             TextFormField(
+              validator: (input) {
+                if (input.isEmpty)
+                  return "Este campo é obrigatório";
+              },
               decoration: InputDecoration(
                   hintText: 'Nome do animal',
                   hintStyle: new TextStyle(color: const Color(0xffbdbdbd), fontSize: 14)
@@ -100,7 +105,7 @@ class _AnimalRegisterScreenState extends State<AnimalRegisterScreen> {
 
             Container(
                 alignment: Alignment.centerLeft,
-                child: Text("FOTOS DO ANIMAL", style: new TextStyle(color: const Color(0xffffd358))),
+                child: Text("FOTO DO ANIMAL", style: new TextStyle(color: const Color(0xffffd358))),
             ),
 
             SizedBox(height: 10),
@@ -115,15 +120,24 @@ class _AnimalRegisterScreenState extends State<AnimalRegisterScreen> {
                       children: <Widget>[
                         SizedBox(height: 50),
                         Icon(Icons.control_point, color: const Color(0xff757575)),
-                        Text("adicionar fotos")
+                        Text("adicionar foto")
                       ],
                     )
                   :
                     Column(
                       children: <Widget>[
-                        SizedBox(height: 50),
-                        Icon(Icons.check_circle_outline, color: const Color(0xff757575)),
-                        Text("imagem adicionada!")
+                       // SizedBox(height: 50),
+                       // Icon(Icons.check_circle_outline, color: const Color(0xff757575)),
+                       // Text("imagem adicionada!")
+                        new Container(
+                            height: 150,
+                            decoration: new BoxDecoration(
+                                shape: BoxShape.rectangle,
+                                image: new DecorationImage(
+                                    fit: BoxFit.scaleDown,
+                                    alignment: FractionalOffset.topCenter,
+                                    image: FileImage(sampleImage)))
+                        )
                       ],
                     )
               ),
@@ -234,6 +248,10 @@ class _AnimalRegisterScreenState extends State<AnimalRegisterScreen> {
             ),
             SizedBox(height: 5),
             TextFormField(
+              validator: (input) {
+                if (input.isEmpty)
+                  return "Este campo é obrigatório";
+              },
               decoration: InputDecoration(
                   hintText: 'Bairro',
                   hintStyle: new TextStyle(color: const Color(0xffbdbdbd), fontSize: 14)
@@ -242,6 +260,10 @@ class _AnimalRegisterScreenState extends State<AnimalRegisterScreen> {
             ),
             SizedBox(height: 10),
             TextFormField(
+              validator: (input) {
+                if (input.isEmpty)
+                  return "Este campo é obrigatório";
+              },
               decoration: InputDecoration(
                   hintText: 'Estado',
                   hintStyle: new TextStyle(color: const Color(0xffbdbdbd), fontSize: 14)
@@ -259,6 +281,10 @@ class _AnimalRegisterScreenState extends State<AnimalRegisterScreen> {
               child: Text("SOBRE O ANIMAL", style: new TextStyle(color: const Color(0xffffd358))),
             ),
             TextFormField(
+              validator: (input) {
+                if (input.isEmpty)
+                  return "Este campo é obrigatório";
+              },
               decoration: InputDecoration(
                   hintText: 'Compartilhe a história do animal',
                   hintStyle: new TextStyle(color: const Color(0xffbdbdbd), fontSize: 14)
@@ -420,13 +446,17 @@ class _AnimalRegisterScreenState extends State<AnimalRegisterScreen> {
 
   Widget callIllnessesTextField(){
     if (_saude.contains("Doente"))
-      return TextFormField(
+      return Column(
+        children: <Widget>[
+        TextFormField(
         decoration: InputDecoration(
             hintText: 'Doenças do animal',
             hintStyle: new TextStyle(color: const Color(0xffbdbdbd), fontSize: 14)
         ),
         controller: healthController,
-      );
+      ),
+          SizedBox(height: 20,)
+        ]);
     else{
       healthController.text = "";
       return Text("");}
@@ -472,36 +502,46 @@ class _AnimalRegisterScreenState extends State<AnimalRegisterScreen> {
 
   Future<void> registerAnimal() async {
     final formState = _basicFormKey.currentState;
+
+    // TODO - arrumar validação do resto do form (checkboxes, radio buttons e imagem)
     if (formState.validate()) {
+      dialogs.loading(context);
+
       formState.save();
       try {
        DocumentReference animal = Firestore.instance.collection('animals').document();
        final StorageReference firebaseStorageRef = FirebaseStorage.instance.ref().child(animal.documentID);
        final StorageUploadTask task = firebaseStorageRef.putFile(sampleImage);
        var photoUrl = await (await task.onComplete).ref.getDownloadURL();
-
        animal.setData({'userUid': session.currentUser.uid, 'species': _especie, 'sex': _sexo, 'size': _porte,
-             'age': _idade, 'characteristics': _temperamento, 'health': _saude == ["a"] ? [""] : _saude, 'animalName': animalNameController.text,
-             'illness': healthController.text, 'about': aboutController.text, 'helpOptions': _tiposAjuda == ["a"] ? [""] : _tiposAjuda,
-             'objects': objectController.text, 'medicine': medicineController.text, 'adoptionRequirements': _exigenciasAdocao == ["a"] ? [""] : _exigenciasAdocao,
-             'trackingPeriod': _periodoAcompanhamento, 'sponsorshipRequirements': _exigenciasApadrinhamento == ["a"] ? [""] : _exigenciasApadrinhamento,
-             'financialAid': _auxilioFinanceiro, 'registerType': _tipoCadastro == ["a"] ? [""] : _tipoCadastro, 'neighbourhood': neighbourhoodController.text,
-             'state': stateController.text, 'url': photoUrl.toString()
-           });
+         'age': _idade, 'characteristics': _temperamento, 'health': _saude == ["a"] ? [""] : _saude, 'animalName': animalNameController.text,
+         'illness': healthController.text, 'about': aboutController.text, 'helpOptions': _tiposAjuda == ["a"] ? [""] : _tiposAjuda,
+         'objects': objectController.text, 'medicine': medicineController.text, 'adoptionRequirements': _exigenciasAdocao == ["a"] ? [""] : _exigenciasAdocao,
+         'trackingPeriod': _periodoAcompanhamento, 'sponsorshipRequirements': _exigenciasApadrinhamento == ["a"] ? [""] : _exigenciasApadrinhamento,
+         'financialAid': _auxilioFinanceiro, 'registerType': _tipoCadastro == ["a"] ? [""] : _tipoCadastro, 'neighbourhood': neighbourhoodController.text,
+         'state': stateController.text, 'url': photoUrl.toString()
+       });
 
-        animalNameController.text = "";
-        aboutController.text = "";
-        healthController.text = "";
-        objectController.text = "";
-        stateController.text = "";
-        neighbourhoodController.text = "";
-
-        Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+       print("Animal registered.");
+       cleanFields();
+       Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
       }
-      catch(e){
-        print(e);
+      catch(e) {
+        print("Error registering animal: $e");
       }
     }
+    else {
+      dialogs.information(context, "Campos marcados com * são obrigatórios.");
+    }
+  }
+
+  void cleanFields() {
+    animalNameController.text = "";
+    aboutController.text = "";
+    healthController.text = "";
+    objectController.text = "";
+    stateController.text = "";
+    neighbourhoodController.text = "";
   }
 
 }

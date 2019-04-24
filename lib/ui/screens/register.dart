@@ -1,3 +1,5 @@
+import 'package:first_project/session.dart';
+import 'package:first_project/ui/screens/dialogs.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:first_project/ui/screens/home.dart';
@@ -22,6 +24,8 @@ TextEditingController usernameController = new TextEditingController();
 
 class _RegisterScreenState extends State<RegisterScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  Dialogs dialogs = new Dialogs();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -263,8 +267,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       textColor: const Color(0xff434343),
                       minWidth: 8.0,
                       height: 40,
-                      onPressed: () => signUp(),
-                    ),)])
+                      onPressed: () async {
+                        dialogs.loading(context);
+                        await Future.delayed(Duration(seconds: 2));
+                        signUp();
+                      },
+                    ))])
           ],
         ),
       )
@@ -280,6 +288,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
         Firestore.instance.collection('users').document(user.uid)
             .setData({'username': usernameController.text, 'age': ageController.text, 'state': stateController.text, 'address': addressController.text,
         'city': cityController.text, 'name': nameController.text, 'telephone': telephoneController.text });
+        nameController.text = "";
+        emailController.text = "";
+        passwordController.text = "";
+        telephoneController.text = "";
+        ageController.text = "";
+        addressController.text = "";
+        stateController.text = "";
+        cityController.text = "";
+        usernameController.text = "";
+
+        session.setCurrentUser();
+        await Future.delayed(Duration(seconds: 1));
+        session.loadData();
+        await Future.delayed(Duration(seconds: 2));
         Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
       }
       catch(e){

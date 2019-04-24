@@ -1,9 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:first_project/session.dart';
+import 'package:first_project/ui/screens/dialogs.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:path/path.dart';
 import 'package:rxdart/rxdart.dart';
 
 class AuthService {
@@ -57,12 +57,25 @@ class AuthService {
     return user;
   }
 
-  Future<FirebaseUser> emailAndPasswordSignIn(String email, String password) async {
-    FirebaseUser user = await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password)
-        .then(session.setCurrentUser())
-        .then(session.loadData());//.catchError((e) => print(e.message));
-    print("signed in " + email);
-    return user;
+  emailAndPasswordSignIn(String email, String password, BuildContext context) async {
+    try {
+      FirebaseUser user = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
+      print("Signed in " + email);
+
+      session.setCurrentUser();
+      await Future.delayed(Duration(seconds: 1));
+      session.loadData();
+      await Future.delayed(Duration(seconds: 2));
+      Navigator.of(context).pushReplacementNamed('/home');
+
+    }
+    catch(e) {
+      print("User not signed in: ${e.toString()}");
+      Navigator.pop(context);
+      var dialogs = new Dialogs();
+      dialogs.information(context, "E-mail ou senha incorretos.");
+    }
   }
 
   void updateUserData(FirebaseUser user) async {
@@ -81,10 +94,8 @@ class AuthService {
     _auth.signOut();
     session.currentUser = null;
     session.userData = Map<String, String>();
-    print("signed out");
+    print("User signed out");
   }
-
-//  Future<FirebaseUser> getCurrentUser() async => await _auth.currentUser();
 }
 
 final AuthService authService = AuthService();

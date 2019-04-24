@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:first_project/ui/screens/dialogs.dart';
 import 'package:first_project/ui/screens/home.dart';
 import 'package:flutter/material.dart';
 import 'package:first_project/auth.dart';
@@ -11,7 +12,9 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   String _email, _password;
+  Dialogs dialogs = new Dialogs();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,7 +24,7 @@ class _LoginScreenState extends State<LoginScreen> {
           iconTheme: IconThemeData(color: Colors.white),
           title: Text("Login", style: TextStyle(color: const Color(0xff434343), fontFamily: 'Roboto-Medium', fontSize: 20)),
           backgroundColor: const Color(0xffcfe9e5),
-          leading: Icon(Icons.dehaze, color: const Color(0xff434343)),
+          leading: IconButton(icon: BackButtonIcon(), onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Home())), color: const Color(0xff434343),),
       ),
 
       body: Form(
@@ -81,15 +84,15 @@ class _LoginScreenState extends State<LoginScreen> {
                       minWidth: 280,
                       height: 40,
                       child: Text("ENTRAR"),
-                      onPressed: () {
+                      onPressed: () async {
                         final formState = _formKey.currentState;
-                        if (formState.validate()) formState.save();
-                        setState(() {
-                          AuthService().emailAndPasswordSignIn(_email, _password);
-                        });
-                        startTime();
+                        if (formState.validate()) {
+                          formState.save();
+                          dialogs.loading(context);
+                          authService.emailAndPasswordSignIn(_email, _password, context);
 
-//                        Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+
+                        }
                       }
                     )
                 ),
@@ -156,22 +159,4 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
-
-  startTime() async {
-    var _duration = new Duration(seconds: 3);
-    return new Timer(_duration, navigationPage2);
-  }
-
-  navigationPage() {
-    session.setCurrentUser();
-    var _duration = new Duration(seconds: 1);
-    return new Timer(_duration, navigationPage2);
-  }
-
-  void navigationPage2() {
-    //session.loadData();
-    Navigator.of(context).pushReplacementNamed('/home');
-    //Navigator.popUntil(context, );
-  }
-
 }

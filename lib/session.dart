@@ -1,18 +1,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:first_project/auth.dart';
 
 class Session {
   FirebaseUser currentUser;
   Map<String, String> userData = Map<String, String>();
 
   setCurrentUser() {
+    //print("Trying to set current user...");
     FirebaseAuth.instance.onAuthStateChanged.listen((user){
       currentUser = user;
-      print("Current user setted to ${currentUser.email} [${currentUser.uid}]");
+      print("Current user setted to ${currentUser.email} [key: ${currentUser.uid}]");
     });
   }
 
   loadData() {
+    //print("Trying to load data from user...");
     try {
       Firestore.instance
           .collection('users')
