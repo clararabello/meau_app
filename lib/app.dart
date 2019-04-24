@@ -1,9 +1,10 @@
+import 'package:first_project/ui/screens/animal_index.dart';
+import 'package:first_project/ui/screens/animal_register.dart';
 import 'package:flutter/material.dart';
 import 'package:first_project/ui/screens/login.dart';
 import 'package:first_project/ui/screens/home.dart';
 import 'package:first_project/ui/screens/register.dart';
-import 'package:first_project/ui/screens/userView.dart';
-
+import 'package:first_project/ui/screens/user_view.dart';
 
 class MeauApp extends StatelessWidget {
   @override
@@ -11,7 +12,7 @@ class MeauApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Meau',
-      initialRoute: '/login',
+      initialRoute: '/home',
       routes: {
         // If you're using navigation routes, Flutter needs a base route.
         // We're going to change this route once we're ready with
@@ -20,7 +21,9 @@ class MeauApp extends StatelessWidget {
         '/home': (context) => Home(),
         '/login': (context) => LoginScreen(),
         '/register': (context) => RegisterScreen(),
-        '/userView:': (context) => UserView(),
+        '/user_view:': (context) => UserView(),
+        '/animal_register': (context) => AnimalRegisterScreen(),
+        '/animal_index': (context) => AnimalIndexScreen(),
 
       },
     );

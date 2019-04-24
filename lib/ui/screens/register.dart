@@ -3,8 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:first_project/ui/screens/home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-
-
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key key, this.user}) : super(key: key);
   final FirebaseUser user;
@@ -22,7 +20,6 @@ TextEditingController stateController = new TextEditingController();
 TextEditingController cityController = new TextEditingController();
 TextEditingController usernameController = new TextEditingController();
 
-
 class _RegisterScreenState extends State<RegisterScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   @override
@@ -31,14 +28,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
       backgroundColor: const Color(0xfffafafa),
 
       appBar: AppBar(
-          titleSpacing: 1,
           iconTheme: IconThemeData(color: Colors.white),
           title: Text("Cadastro Pessoal", style: TextStyle(color: const Color(0xff434343), fontSize: 20, fontFamily: 'Roboto-Medium',)),
           backgroundColor: const Color(0xffcfe9e5),
           leading: Icon(Icons.dehaze, color: const Color(0xff434343))
       ),
 
-      body:Form(
+      body: Form(
         key: _formKey,
         child: ListView(
           children: <Widget>[
@@ -245,7 +241,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
             SizedBox(height: 28.0),
 
-            new Container(
+            /*new Container(
               alignment: Alignment.centerLeft,
               padding: new EdgeInsets.only( left: 28.0),
               child:
@@ -254,15 +250,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 textAlign: TextAlign.left,),
             ),
 
-            SizedBox(height: 32.0),
+            SizedBox(height: 32.0),*/
 
-            Text("FOTO"),
             Column(
                 children:<Widget>[
                   Container(
                     width: 232,
                     child:
                     MaterialButton(
+                      child: Text("FAZER CADASTRO"),
                       color: const Color(0xff88c9bf),
                       textColor: const Color(0xff434343),
                       minWidth: 8.0,
@@ -282,8 +278,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
       try {
         FirebaseUser user = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: emailController.text, password: passwordController.text);
         Firestore.instance.collection('users').document(user.uid)
-            .setData({'username': nameController.text, 'age': ageController.text, 'state': stateController.text,
-        'city': cityController.text, 'name': nameController.text, 'telehpone': telephoneController.text });
+            .setData({'username': usernameController.text, 'age': ageController.text, 'state': stateController.text, 'address': addressController.text,
+        'city': cityController.text, 'name': nameController.text, 'telephone': telephoneController.text });
         Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
       }
       catch(e){

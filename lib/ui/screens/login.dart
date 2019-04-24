@@ -1,6 +1,8 @@
+import 'dart:async';
 import 'package:first_project/ui/screens/home.dart';
 import 'package:flutter/material.dart';
 import 'package:first_project/auth.dart';
+import 'package:first_project/session.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -82,8 +84,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       onPressed: () {
                         final formState = _formKey.currentState;
                         if (formState.validate()) formState.save();
-                        AuthService().emailAndPasswordSignIn(_email, _password);
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+                        setState(() {
+                          AuthService().emailAndPasswordSignIn(_email, _password);
+                        });
+                        startTime();
+
+//                        Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
                       }
                     )
                 ),
@@ -136,6 +142,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     onPressed: () => print("Entrar com Google"),
                   ),
                 ),
+                FlatButton( // link login
+                  textColor: const Color(0xff88c9bf),
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/register');
+                  },
+                  child: Text("cadastrar conta")
+                )
               ],
             ),
           ],
@@ -144,6 +157,21 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+  startTime() async {
+    var _duration = new Duration(seconds: 3);
+    return new Timer(_duration, navigationPage2);
+  }
+
+  navigationPage() {
+    session.setCurrentUser();
+    var _duration = new Duration(seconds: 1);
+    return new Timer(_duration, navigationPage2);
+  }
+
+  void navigationPage2() {
+    //session.loadData();
+    Navigator.of(context).pushReplacementNamed('/home');
+    //Navigator.popUntil(context, );
+  }
 
 }
-
