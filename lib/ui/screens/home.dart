@@ -10,7 +10,6 @@ import 'package:first_project/ui/screens/user_view.dart';
 import 'package:first_project/ui/screens/animal_index.dart';
 
 
-
 class Home extends StatefulWidget {
   FirebaseUser user = session.currentUser;
   Future<FirebaseUser> futureUser = FirebaseAuth.instance.currentUser();
@@ -42,6 +41,7 @@ class _HomeState extends State<Home> {
 
         body:
         Center(
+          child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
 
@@ -59,20 +59,8 @@ class _HomeState extends State<Home> {
                 }
               },
             ),*/
-
-           /* FlatButton(
-                child: Text("logout"),
-                onPressed: () {
-                  try {
-                    AuthService().signOut();
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()));
-                  } catch (e){
-                    print("erro");
-                  }
-                }
-            ),*/
-
-           /* Container(    // icone de menu
+              
+            Container(    // icone de menu
               height: 56,
               padding: new EdgeInsets.only(left: 12, top: 12),
               alignment: Alignment.topLeft,
@@ -119,6 +107,24 @@ class _HomeState extends State<Home> {
 
               SizedBox(height: 48.0),
 
+            MaterialButton( // Botão histórias
+                color: const Color(0xffffd358),
+                textColor: const Color(0xff434343),
+                minWidth: 232,
+                height: 40,
+                child: Text("HISTÓRIAS DE ADOÇÃO"),
+                onPressed: () {
+                  try {
+                    AuthService().signOut();
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => AdoptionStories()));
+                  } catch (e){
+                    print("erro");
+                  }
+                }
+            ),
+
+            SizedBox(height: 12.0),
+
             MaterialButton( // Botão adotar
               color: const Color(0xffffd358),
               textColor: const Color(0xff434343),
@@ -139,13 +145,13 @@ class _HomeState extends State<Home> {
               SizedBox(height: 12.0),
 
               MaterialButton( // Botão ajudar
-                color: const Color(0xffffd358),
-                textColor: const Color(0xff434343),
-                minWidth: 232,
-                height: 40,
-                child: Text("AJUDAR"),
-                onPressed: () => print("AJUDAR"),
-              ),
+              color: const Color(0xffffd358),
+              textColor: const Color(0xff434343),
+              minWidth: 232,
+              height: 40,
+              child: Text("AJUDAR"),
+              onPressed: () => print("AJUDAR"),
+            ),
 
               SizedBox(height: 12.0),
 
@@ -161,6 +167,19 @@ class _HomeState extends State<Home> {
 
               SizedBox(height: 44.0),
 
+            FlatButton(
+                child: Text("logout"),
+                onPressed: () {
+                  try {
+                    AuthService().signOut();
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()));
+                  } catch (e){
+                    print("erro");
+                  }
+                }
+            ),
+
+            SizedBox(height: 44.0),
 
               retorna_login(context),
 
@@ -177,6 +196,7 @@ class _HomeState extends State<Home> {
               ),
             ],
           ),
+        ),
         ),
       );
   }
