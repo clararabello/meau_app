@@ -500,6 +500,11 @@ class _AnimalRegisterScreenState extends State<AnimalRegisterScreen> {
   }
 
   Future<void> registerAnimal() async {
+    if (session.currentUser == null) {
+      dialogs.information(context, "Você deve estar logado para cadastrar um animal!");
+      return null;
+    }
+
     final formState = _basicFormKey.currentState;
 
     // TODO - arrumar validação do resto do form (checkboxes, radio buttons e imagem)

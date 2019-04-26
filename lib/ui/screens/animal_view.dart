@@ -5,12 +5,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:first_project/session.dart';
 
 class AnimalView extends StatefulWidget {
-  final String animalId;
+  final String animalId, tipo;
 
-  AnimalView({Key key, @required this.animalId}) : super(key: key);
+  AnimalView({Key key, @required this.animalId, this.tipo}) : super(key: key);
 
   @override
   _AnimalViewState createState() => _AnimalViewState();
+
 }
 
 class _AnimalViewState extends State<AnimalView> {
@@ -36,7 +37,7 @@ class _AnimalViewState extends State<AnimalView> {
                 backgroundColor: const Color(0xffffd358),
                 leading: IconButton(icon: BackButtonIcon(),
                   color: const Color(0xff434343),
-                  onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => AnimalIndexScreen())),
+                  onPressed: () => Navigator.pop(context),
               )),
 
               drawer: returnBar(),
@@ -339,13 +340,9 @@ class _AnimalViewState extends State<AnimalView> {
                                       textColor: const Color(0xff434343),
                                       minWidth: 280,
                                       height: 40,
-                                      child: Text("PRETENDO ADOTAR"),
-                                      onPressed: () {
-                                        setState(() {
-                                          loadAnimalData();
-                                        });
-                                      }),
-
+                                      child: Text("PRETENDO ${widget.tipo}"),
+                                      onPressed: () => print("Pretendo...")
+                                  ),
                                   SizedBox(height: 24)
                                 ],
                               ),

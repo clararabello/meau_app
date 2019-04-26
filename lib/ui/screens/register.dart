@@ -35,7 +35,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           iconTheme: IconThemeData(color: Colors.white),
           title: Text("Cadastro Pessoal", style: TextStyle(color: const Color(0xff434343), fontSize: 20, fontFamily: 'Roboto-Medium',)),
           backgroundColor: const Color(0xffcfe9e5),
-          leading: Icon(Icons.dehaze, color: const Color(0xff434343))
+          leading: IconButton(icon: BackButtonIcon(), onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Home())), color: const Color(0xff434343)),
       ),
 
       body: Form(
