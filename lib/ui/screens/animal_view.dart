@@ -1,5 +1,4 @@
 import 'package:first_project/ui/screens/animal_index.dart';
-import 'package:first_project/ui/screens/home.dart';
 import 'package:first_project/ui/screens/user_view.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

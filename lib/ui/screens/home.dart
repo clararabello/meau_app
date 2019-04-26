@@ -1,15 +1,9 @@
 import 'package:first_project/session.dart';
-import 'package:first_project/ui/screens/animal_view.dart';
-import 'package:first_project/ui/screens/stories.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'login.dart';
 import 'package:first_project/auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:first_project/ui/screens/user_view.dart';
 import 'package:first_project/ui/screens/animal_index.dart';
-
 
 class Home extends StatefulWidget {
   FirebaseUser user = session.currentUser;

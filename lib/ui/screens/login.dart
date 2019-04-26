@@ -1,9 +1,7 @@
-import 'dart:async';
 import 'package:first_project/ui/screens/dialogs.dart';
 import 'package:first_project/ui/screens/home.dart';
 import 'package:flutter/material.dart';
 import 'package:first_project/auth.dart';
-import 'package:first_project/session.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
