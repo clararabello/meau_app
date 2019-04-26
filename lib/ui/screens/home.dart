@@ -1,4 +1,5 @@
 import 'package:first_project/session.dart';
+import 'package:first_project/ui/screens/my_pets.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:first_project/auth.dart';
@@ -153,7 +154,7 @@ class _HomeState extends State<Home> {
     }
   }
 
-  Widget returnBar() {
+ Widget returnBar() {
     if (session.currentUser == null) {
       return new Drawer(
           child: new Column(
@@ -243,6 +244,16 @@ class _HomeState extends State<Home> {
                     MaterialPageRoute(
                         builder: (context) =>
                             AnimalIndexScreen(tipo: 'APADRINHAR')));
+              });
+            },
+          ),
+
+          new Divider(),
+          new ListTile(
+            title: new Text('Meus Pets'),
+            onTap: () {
+              this.setState(() {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => MyPetsScreen()));
               });
             },
           ),

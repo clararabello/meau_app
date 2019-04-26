@@ -273,28 +273,7 @@ class _AnimalViewState extends State<AnimalView> {
 
                                   Column(
                                     children: <Widget>[
-                                      Row(
-                                        children: <Widget>[
-                                          Text("EXIGÊNCIAS DO DOADOR",
-                                              style: TextStyle(
-                                                  fontFamily: 'Roboto-Regular',
-                                                  fontSize: 12,
-                                                  color: const Color(0xffffd358))),
-                                        ],
-                                      ),
-                                      SizedBox(height: 5),
-                                      Column(
-                                          children: snapshot.data["adoptionRequirements"]
-                                              .map<Widget>((item) =>
-                                          new Row(children: <Widget>[
-                                            new Text(item,
-                                                style: TextStyle(
-                                                    fontFamily: 'Roboto-Regular',
-                                                    fontSize: 14,
-                                                    color: const Color(0xff434343))),
-                                            new SizedBox(height: 25)
-                                          ]))
-                                              .toList()),
+                                      showDemands(snapshot),
                                     ],
                                   ),
 
@@ -335,14 +314,7 @@ class _AnimalViewState extends State<AnimalView> {
                                   ),
                                   SizedBox(height: 40),
 
-                                  MaterialButton(
-                                      color: const Color(0xfffdcf58),
-                                      textColor: const Color(0xff434343),
-                                      minWidth: 280,
-                                      height: 40,
-                                      child: Text("PRETENDO ${widget.tipo}"),
-                                      onPressed: () => print("Pretendo...")
-                                  ),
+                                  showButtons(snapshot),
                                   SizedBox(height: 24)
                                 ],
                               ),
@@ -438,5 +410,151 @@ class _AnimalViewState extends State<AnimalView> {
                           color: const Color(0xff434343)))
                 ]))
             .toList());
+  }
+
+  Widget showButtons(AsyncSnapshot animal) {
+    if (session.currentUser != null && animal.data["userUid"] == session.currentUser.uid)
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          MaterialButton(
+              color: const Color(0xfffdcf58),
+              textColor: const Color(0xff434343),
+              minWidth: 148,
+              height: 40,
+              child: Text("VER INTERESSADOS", style: TextStyle(fontSize: 12)),
+              onPressed: () => print("ver interessados")
+          ),
+          SizedBox(width: 16),
+          MaterialButton(
+              color: const Color(0xfffdcf58),
+              textColor: const Color(0xff434343),
+              minWidth: 148,
+              height: 40,
+              child: Text("REMOVER PET", style: TextStyle(fontSize: 12)),
+              onPressed: () => print("remover pet")
+          )
+        ],
+      );
+    else
+      return MaterialButton(
+        color: const Color(0xfffdcf58),
+        textColor: const Color(0xff434343),
+        minWidth: 280,
+        height: 40,
+        child: Text("PRETENDO ${widget.tipo}", style: TextStyle(fontSize: 12)),
+        onPressed: () => print("Pretendo...")
+    );
+  }
+
+  Widget showDemands(AsyncSnapshot animal) {
+    return Column(
+      children: <Widget>[
+        showAjudar(animal),
+        showAdotar(animal),
+        showApadrinhar(animal)
+      ],
+    );
+  }
+
+  showAjudar(AsyncSnapshot animal) {
+    if (animal.data["registerType"].contains("AJUDAR"))
+      return new Column(
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Text("EXIGÊNCIAS PARA AJUDAR",
+                  style: TextStyle(
+                      fontFamily: 'Roboto-Regular',
+                      fontSize: 12,
+                      color: const Color(0xffffd358))),
+            ],
+          ),
+          SizedBox(height: 5),
+          Column(
+              children: animal.data["helpOptions"]
+                  .map<Widget>((item) =>
+              new Row(children: <Widget>[
+                new Text(item,
+                    style: TextStyle(
+                        fontFamily: 'Roboto-Regular',
+                        fontSize: 14,
+                        color: const Color(0xff434343))),
+                new SizedBox(height: 25)
+              ]))
+                  .toList()
+          ),
+        ],
+      );
+    else
+      return new SizedBox(height: 0);
+  }
+
+  showAdotar(AsyncSnapshot animal) {
+    if (animal.data["registerType"].contains("ADOTAR"))
+      return new Column(
+        children: <Widget>[
+          animal.data["registerType"].contains("AJUDAR") ? SizedBox(height: 15) : SizedBox(height: 0),
+          Row(
+            children: <Widget>[
+              Text("EXIGÊNCIAS PARA ADOTAR",
+                  style: TextStyle(
+                      fontFamily: 'Roboto-Regular',
+                      fontSize: 12,
+                      color: const Color(0xffffd358))),
+            ],
+          ),
+          SizedBox(height: 5),
+          Column(
+              children: animal.data["adoptionRequirements"]
+                  .map<Widget>((item) =>
+              new Row(children: <Widget>[
+                new Text(item,
+                    style: TextStyle(
+                        fontFamily: 'Roboto-Regular',
+                        fontSize: 14,
+                        color: const Color(0xff434343))),
+                new SizedBox(height: 25)
+              ]))
+                  .toList()
+          ),
+        ],
+      );
+    else
+      return new SizedBox(height: 0);
+  }
+
+  showApadrinhar(AsyncSnapshot animal) {
+    if (animal.data["registerType"].contains("APADRINHAR"))
+      return new Column(
+        children: <Widget>[
+          animal.data["registerType"].contains("AJUDAR") || animal.data["registerType"].contains("ADOTAR") ? SizedBox(height: 15) : SizedBox(height: 0),
+          Row(
+            children: <Widget>[
+              Text("EXIGÊNCIAS PARA APADRINHAR",
+                  style: TextStyle(
+                      fontFamily: 'Roboto-Regular',
+                      fontSize: 12,
+                      color: const Color(0xffffd358))),
+            ],
+          ),
+          SizedBox(height: 5),
+          Column(
+              children: animal.data["sponsorshipRequirements"]
+                  .map<Widget>((item) =>
+              new Row(children: <Widget>[
+                new Text(item,
+                    style: TextStyle(
+                        fontFamily: 'Roboto-Regular',
+                        fontSize: 14,
+                        color: const Color(0xff434343))),
+                new SizedBox(height: 25)
+              ]))
+                  .toList()
+          ),
+        ],
+      );
+    else
+      return new SizedBox(height: 0);
   }
 }

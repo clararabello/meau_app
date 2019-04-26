@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:first_project/session.dart';
+import 'package:first_project/ui/screens/animal_register_success.dart';
 import 'package:first_project/ui/screens/dialogs.dart';
 import 'package:first_project/ui/screens/home.dart';
 import 'package:flutter/material.dart';
@@ -528,7 +529,7 @@ class _AnimalRegisterScreenState extends State<AnimalRegisterScreen> {
 
        print("Animal registered.");
        cleanFields();
-       Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+       Navigator.push(context, MaterialPageRoute(builder: (context) => AnimalRegisterSuccess()));
       }
       catch(e) {
         print("Error registering animal: $e");
