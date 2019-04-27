@@ -147,6 +147,8 @@ class _AnimalIndexScreenState extends State<AnimalIndexScreen> {
       return "Adotar";
     else if (widget.tipo == "APADRINHAR")
       return "Apadrinhar";
+    else if (widget.tipo == "FAVORITOS")
+      return "Favoritos";
     else
       return "Ajudar";
   }

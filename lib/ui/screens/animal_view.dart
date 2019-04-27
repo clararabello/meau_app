@@ -326,7 +326,12 @@ class _AnimalViewState extends State<AnimalView> {
                             child: new FloatingActionButton(
                                 backgroundColor: const Color(0xfffafafa),
                                 child: Icon(Icons.favorite_border, color: const Color(0xff434343)),
-                                onPressed: () => print("aaa")
+                                onPressed: () => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            AnimalIndexScreen(tipo: "ADOTAR")))
+                                    //print("aaa")
                             ),
                           left: 330,
                           top: 220,
@@ -337,7 +342,6 @@ class _AnimalViewState extends State<AnimalView> {
       },
     );
   }
-
   Widget returnBar() {
     if (session.currentUser == null) {
       return SizedBox(height: 0);

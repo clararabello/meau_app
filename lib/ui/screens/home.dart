@@ -192,6 +192,19 @@ class _HomeState extends State<Home> {
           ),
           new Divider(),
           new ListTile(
+            title: new Text('Meus Favoritos'),
+            onTap: () {
+              this.setState(() {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            AnimalIndexScreen(tipo: 'FAVORITOS')));
+              });
+            },
+          ),
+          new Divider(),
+          new ListTile(
             title: new Text('Home'),
             onTap: () {
               this.setState(() {
