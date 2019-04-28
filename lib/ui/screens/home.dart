@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:first_project/auth.dart';
 import 'package:first_project/ui/screens/user_view.dart';
 import 'package:first_project/ui/screens/animal_index.dart';
+import 'package:first_project/ui/screens/favorites.dart';
 
 class Home extends StatefulWidget {
   FirebaseUser user = session.currentUser;
@@ -197,10 +198,8 @@ class _HomeState extends State<Home> {
               this.setState(() {
                 Navigator.push(
                     context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            AnimalIndexScreen(tipo: 'FAVORITOS')));
-              });
+                    MaterialPageRoute(builder: (context) => Favorites())
+                );});
             },
           ),
           new Divider(),
