@@ -524,7 +524,7 @@ class _AnimalRegisterScreenState extends State<AnimalRegisterScreen> {
          'objects': objectController.text, 'medicine': medicineController.text, 'adoptionRequirements': _exigenciasAdocao == ["a"] ? [""] : _exigenciasAdocao,
          'trackingPeriod': _periodoAcompanhamento, 'sponsorshipRequirements': _exigenciasApadrinhamento == ["a"] ? [""] : _exigenciasApadrinhamento,
          'financialAid': _auxilioFinanceiro, 'registerType': _tipoCadastro == ["a"] ? [""] : _tipoCadastro, 'neighbourhood': neighbourhoodController.text,
-         'state': stateController.text, 'url': photoUrl.toString()
+         'state': stateController.text, 'url': photoUrl.toString(), 'favoritedBy': ""
        });
 
        print("Animal registered.");
