@@ -103,6 +103,7 @@ class _AnimalRegisterScreenState extends State<AnimalRegisterScreen> {
             ),
             SizedBox(height: 20),
 
+            //TODO - colocar opção de tirar foto na hora (câmera)
             Container(
                 alignment: Alignment.centerLeft,
                 child: Text("FOTO DO ANIMAL", style: new TextStyle(color: const Color(0xffffd358))),

@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:first_project/session.dart';
 
+//TODO - implementar view de usuário (sem ser o currentUser)
 class UserView extends StatefulWidget {
   const UserView({Key key, this.user}) : super(key: key);
   final FirebaseUser user;

@@ -1,4 +1,8 @@
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:first_project/ui/screens/animal_adopt_success.dart';
 import 'package:first_project/ui/screens/animal_index.dart';
+import 'package:first_project/ui/screens/animal_register_success.dart';
+import 'package:first_project/ui/screens/interesteds_screen.dart';
 import 'package:first_project/ui/screens/user_view.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -412,7 +416,7 @@ class _AnimalViewState extends State<AnimalView> {
             .toList());
   }
 
-  Widget showButtons(AsyncSnapshot animal) {
+  showButtons(AsyncSnapshot animal) {
     if (session.currentUser != null && animal.data["userUid"] == session.currentUser.uid)
       return Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -423,7 +427,7 @@ class _AnimalViewState extends State<AnimalView> {
               minWidth: 148,
               height: 40,
               child: Text("VER INTERESSADOS", style: TextStyle(fontSize: 12)),
-              onPressed: () => print("ver interessados")
+              onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => interestedsScreen(animalId: widget.animalId))),
           ),
           SizedBox(width: 16),
           MaterialButton(
@@ -432,19 +436,68 @@ class _AnimalViewState extends State<AnimalView> {
               minWidth: 148,
               height: 40,
               child: Text("REMOVER PET", style: TextStyle(fontSize: 12)),
-              onPressed: () => print("remover pet")
+              onPressed: () => print("remover pet") //TODO - implementar remover pet
           )
         ],
       );
-    else
-      return MaterialButton(
-        color: const Color(0xfffdcf58),
-        textColor: const Color(0xff434343),
-        minWidth: 280,
-        height: 40,
-        child: Text("PRETENDO ${widget.tipo}", style: TextStyle(fontSize: 12)),
-        onPressed: () => print("Pretendo...")
-    );
+    else {
+      return FutureBuilder(
+        future: interestAlreadyExist(session.currentUser.uid, widget.animalId),
+        builder: (context, AsyncSnapshot<bool> result) {
+          if (!result.hasData)
+            return Container(); // future still needs to be finished (loading)
+          if (result.data) // result.data is the returned bool from doesNameAlreadyExists
+            return Text("Você já mostrou interesse por esse pet! Agora é só esperar a resposta do dono ;)",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                fontFamily: 'Roboto-Regular',
+                fontSize: 14,
+                color: const Color(0xff434343)));
+          else
+            return MaterialButton(
+                color: const Color(0xfffdcf58),
+                textColor: const Color(0xff434343),
+                minWidth: 280,
+                height: 40,
+                child: Text("PRETENDO ${widget.tipo}", style: TextStyle(fontSize: 12)),
+                onPressed: () async {
+                  try {
+                    DocumentReference interested = Firestore.instance.collection(
+                        'interesteds').document();
+                    interested.setData({
+                      'interestedUid': session.currentUser.uid,
+                      'animalUid': widget.animalId,
+                      'type': widget.tipo,
+                      'interestedName': session.userData["name"],
+                      'animalName': animal.data["animalName"]
+                    });
+
+                    print("Interest registered.");
+                    Navigator.push(context, MaterialPageRoute(
+                        builder: (context) => AnimalAdoptSuccess()));
+                  }
+                  catch (e) {
+                    print("Error registering interest: $e");
+                  }
+                }
+            );
+        },
+      );
+        /*return */
+    //else
+    //
+    }
+  }
+
+  Future<bool> interestAlreadyExist(String person, String animal) async {
+    final QuerySnapshot result = await Firestore.instance
+        .collection('interesteds')
+        .where('interestedUid', isEqualTo: person)
+        .where('animalUid', isEqualTo: animal)
+        .limit(1)
+        .getDocuments();
+    final List<DocumentSnapshot> documents = result.documents;
+    return documents.length >= 1;
   }
 
   Widget showDemands(AsyncSnapshot animal) {

@@ -91,7 +91,7 @@ class _MyPetsScreenState extends State<MyPetsScreen> {
                                     padding: EdgeInsets.fromLTRB(0, 6, 0, 6),
                                       child:
                                       Column(children: <Widget>[
-                                        Text("3 NOVOS INTERESSADOS"),
+                                        Text("3 USUÁRIOS INTERESSADOS"), //TODO - número de interessados (numberOfInteresteds(animal_id))
                                         SizedBox(height: 3),
                                         Text("APADRINHAMENTO | AJUDA")
                                       ])
@@ -218,4 +218,13 @@ class _MyPetsScreenState extends State<MyPetsScreen> {
       .collection('animals')
       .where('userUid', isEqualTo: session.currentUser.uid)
       .snapshots();
+
+  numberOfInteresteds(String animal) async {
+    var result = await Firestore.instance
+        .collection('interesteds')
+        .where('animalUid', isEqualTo: animal)
+        .getDocuments();
+    final List<DocumentSnapshot> documents = result.documents;
+    return documents.length;
+  }
 }
