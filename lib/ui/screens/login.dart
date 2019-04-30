@@ -88,8 +88,6 @@ class _LoginScreenState extends State<LoginScreen> {
                           formState.save();
                           dialogs.loading(context);
                           authService.emailAndPasswordSignIn(_email, _password, context);
-
-
                         }
                       }
                     )
