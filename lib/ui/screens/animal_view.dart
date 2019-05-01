@@ -322,7 +322,7 @@ class _AnimalViewState extends State<AnimalView> {
                           ],
                         ),
 
-                        new Positioned(
+                        new Positioned( // BOTAO FAVORITAR
                             child: new FloatingActionButton(
                                 backgroundColor: const Color(0xfffafafa),
                                 child: Icon(Icons.favorite_border, color: const Color(0xff434343)),
