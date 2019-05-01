@@ -33,7 +33,11 @@ class _MyPetsScreenState extends State<MyPetsScreen> {
               body: ListView(
                   children: snapshots.data.documents
                       .map<Widget>((animal) => new GestureDetector(
-                      onTap: () => print("ver animal"),
+                      onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  AnimalView(animalId: animal.documentID, tipo: ""))),
                       child: new Card(
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10)),
@@ -91,10 +95,18 @@ class _MyPetsScreenState extends State<MyPetsScreen> {
                                     padding: EdgeInsets.fromLTRB(0, 6, 0, 6),
                                       child:
                                       Column(children: <Widget>[
-                                        Text("3 USUÁRIOS INTERESSADOS"), //TODO - número de interessados (numberOfInteresteds(animal_id))
-                                        SizedBox(height: 3),
-                                        Text("APADRINHAMENTO | AJUDA")
-                                      ])
+                                        FutureBuilder(
+                                          future: numberOfInteresteds(animal.documentID),
+                                          builder: (context, AsyncSnapshot<int> result) {
+                                            if (!result.hasData)
+                                              return Container(); // future still needs to be finished (loading)
+                                            else
+                                              return Text("${result.data} USUÁRIO(S) INTERESSADO(S)");
+                                              //SizedBox(height: 3),
+                                              //Text("${typeOfInterest(animal.documentID)}")
+                                          },
+                                        ),
+                                      ]),
                                   ),
                                 ]),
                               )))))
@@ -219,12 +231,20 @@ class _MyPetsScreenState extends State<MyPetsScreen> {
       .where('userUid', isEqualTo: session.currentUser.uid)
       .snapshots();
 
-  numberOfInteresteds(String animal) async {
+  Future<int> numberOfInteresteds(String animal) async {
     var result = await Firestore.instance
         .collection('interesteds')
         .where('animalUid', isEqualTo: animal)
         .getDocuments();
     final List<DocumentSnapshot> documents = result.documents;
     return documents.length;
+  }
+
+  typeOfInterest(String animal) async {
+    var result = await Firestore.instance
+        .collection('interesteds')
+        .where('animalUid', isEqualTo: animal)
+        .getDocuments();
+
   }
 }

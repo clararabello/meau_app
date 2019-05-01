@@ -28,13 +28,6 @@ class _AnimalRegisterScreenState extends State<AnimalRegisterScreen> {
   Dialogs dialogs = new Dialogs();
   File sampleImage;
 
-  Future getImage() async {
-    var tempImage = await ImagePicker.pickImage(source: ImageSource.gallery);
-
-  setState(() {
-  sampleImage = tempImage;
-  });}
-
   String _especie, _sexo, _porte, _idade, _periodoAcompanhamento;
   List<String> _temperamento, _auxilioFinanceiro;
   List<String> _saude = ['a'], _tipoCadastro = ['a'], _tiposAjuda = ['a'], _exigenciasAdocao = ['a'], _exigenciasApadrinhamento = ['a'];
@@ -550,6 +543,46 @@ class _AnimalRegisterScreenState extends State<AnimalRegisterScreen> {
     neighbourhoodController.text = "";
   }
 
+  Future<void> getImage() {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            content: new SingleChildScrollView(
+              child: new ListBody(
+                children: <Widget>[
+                  GestureDetector(
+                    child: new Text('Câmera'),
+                    onTap: openCamera,
+                  ),
+                  Padding(padding: EdgeInsets.all(8.0)),
+                  GestureDetector(
+                    child: new Text('Galeria'),
+                    onTap: openGallery,
+                  ),
+                ],
+              ),
+            ),
+          );
+        }
+    );
+  }
+
+  Future openGallery() async {
+    var tempImage = await ImagePicker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      sampleImage = tempImage;
+    });
+    Navigator.pop(context);
+  }
+
+  Future openCamera() async {
+    var tempImage = await ImagePicker.pickImage(source: ImageSource.camera);
+    setState(() {
+      sampleImage = tempImage;
+    });
+    Navigator.pop(context);
+  }
 }
 
 

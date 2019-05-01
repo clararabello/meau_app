@@ -133,6 +133,8 @@ class _AnimalIndexScreenState extends State<AnimalIndexScreen> {
                                     ]),
                                   )))))
                       .toList()));
+        else
+          return new Container();
       },
     );
   }

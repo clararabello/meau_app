@@ -338,6 +338,8 @@ class _AnimalViewState extends State<AnimalView> {
                       ],
                     ),
               ])));
+        else
+          return new Container();
       },
     );
   }
@@ -441,51 +443,60 @@ class _AnimalViewState extends State<AnimalView> {
         ],
       );
     else {
-      return FutureBuilder(
-        future: interestAlreadyExist(session.currentUser.uid, widget.animalId),
-        builder: (context, AsyncSnapshot<bool> result) {
-          if (!result.hasData)
-            return Container(); // future still needs to be finished (loading)
-          if (result.data) // result.data is the returned bool from doesNameAlreadyExists
-            return Text("Você já mostrou interesse por esse pet! Agora é só esperar a resposta do dono ;)",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                fontFamily: 'Roboto-Regular',
-                fontSize: 14,
-                color: const Color(0xff434343)));
-          else
-            return MaterialButton(
-                color: const Color(0xfffdcf58),
-                textColor: const Color(0xff434343),
-                minWidth: 280,
-                height: 40,
-                child: Text("PRETENDO ${widget.tipo}", style: TextStyle(fontSize: 12)),
-                onPressed: () async {
-                  try {
-                    DocumentReference interested = Firestore.instance.collection(
-                        'interesteds').document();
-                    interested.setData({
-                      'interestedUid': session.currentUser.uid,
-                      'animalUid': widget.animalId,
-                      'type': widget.tipo,
-                      'interestedName': session.userData["name"],
-                      'animalName': animal.data["animalName"]
-                    });
+      if (session.currentUser != null)
+        return FutureBuilder(
+          future: interestAlreadyExist(session.currentUser.uid, widget.animalId),
+          builder: (context, AsyncSnapshot<bool> result) {
+            if (!result.hasData)
+              return Container(); // future still needs to be finished (loading)
+            if (result.data) // result.data is the returned bool from doesNameAlreadyExists
+              return Text("Você já mostrou interesse por esse pet! Agora é só esperar a resposta do dono ;)",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                  fontFamily: 'Roboto-Regular',
+                  fontSize: 14,
+                  color: const Color(0xff434343)));
+            else
+              return MaterialButton(
+                  color: const Color(0xfffdcf58),
+                  textColor: const Color(0xff434343),
+                  minWidth: 280,
+                  height: 40,
+                  child: Text("PRETENDO ${widget.tipo}", style: TextStyle(fontSize: 12)),
+                  onPressed: () async {
+                    try {
+                      DocumentReference interested = Firestore.instance.collection(
+                          'interesteds').document();
+                      interested.setData({
+                        'interestedUid': session.currentUser.uid,
+                        'animalUid': widget.animalId,
+                        'type': widget.tipo,
+                        'interestedName': session.userData["name"],
+                        'animalName': animal.data["animalName"]
+                      });
 
-                    print("Interest registered.");
-                    Navigator.push(context, MaterialPageRoute(
-                        builder: (context) => AnimalAdoptSuccess()));
+                      print("Interest registered.");
+                      Navigator.push(context, MaterialPageRoute(
+                          builder: (context) => AnimalAdoptSuccess()));
+                    }
+                    catch (e) {
+                      print("Error registering interest: $e");
+                    }
                   }
-                  catch (e) {
-                    print("Error registering interest: $e");
-                  }
-                }
-            );
-        },
-      );
-        /*return */
-    //else
-    //
+              );
+          },
+        );
+      else
+        return new Column(
+          children: <Widget>[
+            Text("Você precisa estar logado para mostrar interesse em um pet!", textAlign: TextAlign.center),
+            FlatButton(
+              textColor: const Color(0xff88c9bf),
+              onPressed: () => Navigator.pushNamed(context, '/login'),
+              child: Text("login")
+            ),
+          ],
+        );
     }
   }
 
