@@ -158,7 +158,8 @@ class _HomeState extends State<Home> {
  Widget returnBar() {
     if (session.currentUser == null) {
       return new Drawer(
-          child: new Column(
+          child:
+          new Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
@@ -168,7 +169,8 @@ class _HomeState extends State<Home> {
           ]));
     } else {
       if (session.userData.isNotEmpty)
-        return new Drawer(
+        return new Drawer(  
+            child: SingleChildScrollView (
             child: new Column(children: <Widget>[
           new UserAccountsDrawerHeader(
             accountName: Text(session.userData["name"]),
@@ -195,11 +197,11 @@ class _HomeState extends State<Home> {
           new ListTile(
             title: new Text('Meus Favoritos'),
             onTap: () {
-              this.setState(() {
+               {
                 Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => Favorites())
-                );});
+                );}
             },
           ),
           new Divider(),
@@ -269,7 +271,7 @@ class _HomeState extends State<Home> {
               });
             },
           ),
-        ]));
+        ])));
       else
         return new SizedBox(
           height: 0,

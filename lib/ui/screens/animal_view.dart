@@ -1,8 +1,9 @@
-import 'package:first_project/ui/screens/animal_index.dart';
 import 'package:first_project/ui/screens/user_view.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:first_project/session.dart';
+import 'package:first_project/ui/screens/animal_register.dart';
+
 
 class AnimalView extends StatefulWidget {
   final String animalId, tipo;
@@ -14,11 +15,10 @@ class AnimalView extends StatefulWidget {
 
 }
 
-class _AnimalViewState extends State<AnimalView> {
+class _AnimalViewState extends State<AnimalView>{
   Map<String, List<String>> animalData = Map<String, List<String>>();
   Map<String, String> ownerData = Map<String, String>();
 
-  @override
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: loadAnimalData(),
@@ -326,12 +326,7 @@ class _AnimalViewState extends State<AnimalView> {
                             child: new FloatingActionButton(
                                 backgroundColor: const Color(0xfffafafa),
                                 child: Icon(Icons.favorite_border, color: const Color(0xff434343)),
-                                onPressed: () => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            AnimalIndexScreen(tipo: "ADOTAR")))
-                                    //print("aaa")
+                                onPressed: () => favoritar()
                             ),
                           left: 330,
                           top: 220,
@@ -342,6 +337,11 @@ class _AnimalViewState extends State<AnimalView> {
       },
     );
   }
+
+  favoritar() {
+    Firestore.instance.collection('animals').document(widget.animalId).updateData({'favoritedBy': session.currentUser.uid});
+  }
+
   Widget returnBar() {
     if (session.currentUser == null) {
       return SizedBox(height: 0);
