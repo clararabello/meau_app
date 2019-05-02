@@ -1,8 +1,8 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:first_project/session.dart';
+import 'package:first_project/ui/screens/animal_register_success.dart';
 import 'package:first_project/ui/screens/dialogs.dart';
 import 'package:first_project/ui/screens/home.dart';
 import 'package:flutter/material.dart';
@@ -27,13 +27,6 @@ class _AnimalRegisterScreenState extends State<AnimalRegisterScreen> {
   final GlobalKey<FormState> _basicFormKey = GlobalKey<FormState>();
   Dialogs dialogs = new Dialogs();
   File sampleImage;
-
-  Future getImage() async {
-    var tempImage = await ImagePicker.pickImage(source: ImageSource.gallery);
-
-  setState(() {
-  sampleImage = tempImage;
-  });}
 
   String _especie, _sexo, _porte, _idade, _periodoAcompanhamento;
   List<String> _temperamento, _auxilioFinanceiro;
@@ -501,6 +494,11 @@ class _AnimalRegisterScreenState extends State<AnimalRegisterScreen> {
   }
 
   Future<void> registerAnimal() async {
+    if (session.currentUser == null) {
+      dialogs.information(context, "Você deve estar logado para cadastrar um animal!");
+      return null;
+    }
+
     final formState = _basicFormKey.currentState;
 
     // TODO - arrumar validação do resto do form (checkboxes, radio buttons e imagem)
@@ -519,12 +517,12 @@ class _AnimalRegisterScreenState extends State<AnimalRegisterScreen> {
          'objects': objectController.text, 'medicine': medicineController.text, 'adoptionRequirements': _exigenciasAdocao == ["a"] ? [""] : _exigenciasAdocao,
          'trackingPeriod': _periodoAcompanhamento, 'sponsorshipRequirements': _exigenciasApadrinhamento == ["a"] ? [""] : _exigenciasApadrinhamento,
          'financialAid': _auxilioFinanceiro, 'registerType': _tipoCadastro == ["a"] ? [""] : _tipoCadastro, 'neighbourhood': neighbourhoodController.text,
-         'state': stateController.text, 'url': photoUrl.toString()
+         'state': stateController.text, 'url': photoUrl.toString(), 'isAvailable': true, 'adoptedBy': ""
        });
 
        print("Animal registered.");
        cleanFields();
-       Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+       Navigator.push(context, MaterialPageRoute(builder: (context) => AnimalRegisterSuccess()));
       }
       catch(e) {
         print("Error registering animal: $e");
@@ -544,6 +542,46 @@ class _AnimalRegisterScreenState extends State<AnimalRegisterScreen> {
     neighbourhoodController.text = "";
   }
 
+  Future<void> getImage() {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            content: new SingleChildScrollView(
+              child: new ListBody(
+                children: <Widget>[
+                  GestureDetector(
+                    child: new Text('Câmera'),
+                    onTap: openCamera,
+                  ),
+                  Padding(padding: EdgeInsets.all(8.0)),
+                  GestureDetector(
+                    child: new Text('Galeria'),
+                    onTap: openGallery,
+                  ),
+                ],
+              ),
+            ),
+          );
+        }
+    );
+  }
+
+  Future openGallery() async {
+    var tempImage = await ImagePicker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      sampleImage = tempImage;
+    });
+    Navigator.pop(context);
+  }
+
+  Future openCamera() async {
+    var tempImage = await ImagePicker.pickImage(source: ImageSource.camera);
+    setState(() {
+      sampleImage = tempImage;
+    });
+    Navigator.pop(context);
+  }
 }
 
 

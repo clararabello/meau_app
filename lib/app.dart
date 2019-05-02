@@ -1,5 +1,11 @@
+import 'package:first_project/ui/screens/adopt_pet.dart';
+import 'package:first_project/ui/screens/adopted_pets.dart';
+import 'package:first_project/ui/screens/animal_adopt_success.dart';
 import 'package:first_project/ui/screens/animal_index.dart';
 import 'package:first_project/ui/screens/animal_register.dart';
+import 'package:first_project/ui/screens/animal_register_success.dart';
+import 'package:first_project/ui/screens/interesteds_screen.dart';
+import 'package:first_project/ui/screens/my_pets.dart';
 import 'package:flutter/material.dart';
 import 'package:first_project/ui/screens/login.dart';
 import 'package:first_project/ui/screens/home.dart';
@@ -23,8 +29,13 @@ class MeauApp extends StatelessWidget {
         '/register': (context) => RegisterScreen(),
         '/user_view:': (context) => UserView(),
         '/animal_register': (context) => AnimalRegisterScreen(),
-        '/animal_index': (context) => AnimalIndexScreen(),
-
+        '/animal_register_success': (context) => AnimalRegisterSuccess(),
+        //'/animal_index': (context) => AnimalIndexScreen(),
+        '/my_pets': (context) => MyPetsScreen(),
+        '/animal_adopt_sucess': (context) => AnimalAdoptSuccess(),
+        //'/interesteds': (context) => interestedsScreen(),
+        '/adopt_pet': (context) => AdoptedPet(),
+        '/adopted_pets': (context) => AdoptedPets(),
       },
     );
   }

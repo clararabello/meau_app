@@ -1,9 +1,13 @@
+import 'dart:io';
+
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:first_project/session.dart';
 import 'package:first_project/ui/screens/dialogs.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:first_project/ui/screens/home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:image_picker/image_picker.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key key, this.user}) : super(key: key);
@@ -24,6 +28,7 @@ TextEditingController usernameController = new TextEditingController();
 
 class _RegisterScreenState extends State<RegisterScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  File sampleImage;
   Dialogs dialogs = new Dialogs();
 
   @override
@@ -35,14 +40,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
           iconTheme: IconThemeData(color: Colors.white),
           title: Text("Cadastro Pessoal", style: TextStyle(color: const Color(0xff434343), fontSize: 20, fontFamily: 'Roboto-Medium',)),
           backgroundColor: const Color(0xffcfe9e5),
-          leading: Icon(Icons.dehaze, color: const Color(0xff434343))
+          leading: IconButton(icon: BackButtonIcon(), onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Home())), color: const Color(0xff434343)),
       ),
 
       body: Form(
         key: _formKey,
         child: ListView(
           children: <Widget>[
-
 
             SizedBox(height: 16.0),
 
@@ -245,7 +249,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
             SizedBox(height: 28.0),
 
-            /*new Container(
+            //TODO - implementar foto de perfil de usuário e câmera
+            new Container(
               alignment: Alignment.centerLeft,
               padding: new EdgeInsets.only( left: 28.0),
               child:
@@ -254,7 +259,46 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 textAlign: TextAlign.left,),
             ),
 
-            SizedBox(height: 32.0),*/
+            SizedBox(height: 10),
+            new Padding(
+              padding: EdgeInsets.all(20),
+              child: new GestureDetector(
+                child: new Container(
+                    width: 400,
+                    height: 150,
+                    color: const Color(0xfff1f2f2),
+                    child:
+                    sampleImage == null ?
+                    Column(
+                      children: <Widget>[
+                        SizedBox(height: 50),
+                        Icon(Icons.control_point, color: const Color(0xff757575)),
+                        Text("adicionar foto")
+                      ],
+                    )
+                        :
+                    Column(
+                      children: <Widget>[
+                        // SizedBox(height: 50),
+                        // Icon(Icons.check_circle_outline, color: const Color(0xff757575)),
+                        // Text("imagem adicionada!")
+                        new Container(
+                            height: 150,
+                            decoration: new BoxDecoration(
+                                shape: BoxShape.rectangle,
+                                image: new DecorationImage(
+                                    fit: BoxFit.scaleDown,
+                                    alignment: FractionalOffset.topCenter,
+                                    image: FileImage(sampleImage)))
+                        )
+                      ],
+                    )
+                ),
+                onTap: getImage,
+              ),
+            ),
+
+            SizedBox(height: 20),
 
             Column(
                 children:<Widget>[
@@ -284,10 +328,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
     if (formState.validate()) {
       formState.save();
       try {
-        FirebaseUser user = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: emailController.text, password: passwordController.text);
-        Firestore.instance.collection('users').document(user.uid)
-            .setData({'username': usernameController.text, 'age': ageController.text, 'state': stateController.text, 'address': addressController.text,
-        'city': cityController.text, 'name': nameController.text, 'telephone': telephoneController.text });
+        FirebaseUser firebaseUser = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: emailController.text, password: passwordController.text);
+        DocumentReference user = Firestore.instance.collection('users').document(firebaseUser.uid);
+        final StorageReference firebaseStorageRef = FirebaseStorage.instance.ref().child(user.documentID);
+        final StorageUploadTask task = firebaseStorageRef.putFile(sampleImage);
+        var photoUrl = await (await task.onComplete).ref.getDownloadURL();
+
+        user.setData({'username': usernameController.text, 'age': ageController.text, 'state': stateController.text, 'address': addressController.text,
+        'city': cityController.text, 'name': nameController.text, 'telephone': telephoneController.text, 'profilePicture': photoUrl});
+
         nameController.text = "";
         emailController.text = "";
         passwordController.text = "";
@@ -308,5 +357,46 @@ class _RegisterScreenState extends State<RegisterScreen> {
         print(e.message);
       }
     }
+  }
+
+  Future<void> getImage() {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            content: new SingleChildScrollView(
+              child: new ListBody(
+                children: <Widget>[
+                  GestureDetector(
+                    child: new Text('Câmera'),
+                    onTap: openCamera,
+                  ),
+                  Padding(padding: EdgeInsets.all(8.0)),
+                  GestureDetector(
+                    child: new Text('Galeria'),
+                    onTap: openGallery,
+                  ),
+                ],
+              ),
+            ),
+          );
+        }
+    );
+  }
+
+  Future openGallery() async {
+    var tempImage = await ImagePicker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      sampleImage = tempImage;
+    });
+    Navigator.pop(context);
+  }
+
+  Future openCamera() async {
+    var tempImage = await ImagePicker.pickImage(source: ImageSource.camera);
+    setState(() {
+      sampleImage = tempImage;
+    });
+    Navigator.pop(context);
   }
 }

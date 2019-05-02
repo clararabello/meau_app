@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:first_project/auth.dart';
 
 class Session {
   FirebaseUser currentUser;
@@ -27,6 +26,7 @@ class Session {
         userData["state"] = doc["state"];
         userData["telephone"] = doc["telephone"];
         userData["username"] = doc["username"];
+        userData["profilePicture"] = doc["profilePicture"];
       });//.onError((e) => print("erro: " + e.message));
       print("Data from ${currentUser.email} loaded.");
     }
