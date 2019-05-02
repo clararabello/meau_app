@@ -8,17 +8,17 @@ import 'package:first_project/ui/screens/my_pets.dart';
 import 'package:first_project/ui/screens/user_view.dart';
 import 'package:flutter/material.dart';
 
-class AnimalRegisterSuccess extends StatefulWidget {
+class AnimalAdoptSuccess extends StatefulWidget {
   @override
-  _AnimalRegisterSuccessState createState() => _AnimalRegisterSuccessState();
+  _AnimalAdoptSuccessState createState() => _AnimalAdoptSuccessState();
 }
 
-class _AnimalRegisterSuccessState extends State<AnimalRegisterSuccess> {
+class _AnimalAdoptSuccessState extends State<AnimalAdoptSuccess> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Cadastro do Animal", style: TextStyle(color: const Color(0xff434343), fontSize: 20, fontFamily: 'Roboto-Medium')),
+        title: Text("Pedido enviado", style: TextStyle(color: const Color(0xff434343), fontSize: 20, fontFamily: 'Roboto-Medium')),
         backgroundColor: const Color(0xffffd358),
         iconTheme: IconThemeData(color: const Color(0xff434343)),
       ),
@@ -29,16 +29,16 @@ class _AnimalRegisterSuccessState extends State<AnimalRegisterSuccess> {
           children: <Widget>[
             Column(
               children: <Widget>[
-                SizedBox(height: 10),
-                Text("Eba!",
+                SizedBox(height: 30),
+                Text("Parabéns!",
                     style: TextStyle(
                         fontFamily: 'Courgette-Regular',
-                        fontSize: 72,
+                        fontSize: 60,
                         color: const Color(0xffffd358))
                 ),
 
-                SizedBox(height: 50),
-                Text("O cadastro do seu pet foi realizado com sucesso!",
+                SizedBox(height: 100),
+                Text("O seu pedido foi enviado para o dono do pet e você receberá a sua confirmação assim que aprovado.",
                     style: TextStyle(
                         fontFamily: 'Roboto-Regular',
                         fontSize: 16,
@@ -48,8 +48,8 @@ class _AnimalRegisterSuccessState extends State<AnimalRegisterSuccess> {
                 SizedBox(height: 15),
                 Text("Certifique-se que permitiu o envio de notificações por push "
                     "no campo privacidade do menu configurações do aplicativo. "
-                    "Assim, poderemos te avisar assim que alguém interessado "
-                    "entrar em contato!",
+                    "Assim, poderemos te avisar assim que o dono entrar em "
+                    "contato!",
                     style: TextStyle(
                         fontFamily: 'Roboto-Regular',
                         fontSize: 16,
@@ -62,12 +62,12 @@ class _AnimalRegisterSuccessState extends State<AnimalRegisterSuccess> {
             Container(
               alignment: Alignment.bottomCenter,
               child: MaterialButton(
-                  color: const Color(0xffffd358),
-                  textColor: const Color(0xff434343),
-                  minWidth: 232,
-                  height: 40,
-                  child: Text("MEUS PETS"),
-                  onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => MyPetsScreen())),
+                color: const Color(0xffffd358),
+                textColor: const Color(0xff434343),
+                minWidth: 232,
+                height: 40,
+                child: Text("VOLTAR PARA HOME"),
+                onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Home())),
               ),
             ),
 
@@ -219,4 +219,4 @@ class _AnimalRegisterSuccessState extends State<AnimalRegisterSuccess> {
         );
     }
   }
-  }
+}

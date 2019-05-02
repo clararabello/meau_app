@@ -8,17 +8,17 @@ import 'package:first_project/ui/screens/my_pets.dart';
 import 'package:first_project/ui/screens/user_view.dart';
 import 'package:flutter/material.dart';
 
-class AnimalRegisterSuccess extends StatefulWidget {
+class AdoptedPet extends StatefulWidget {
   @override
-  _AnimalRegisterSuccessState createState() => _AnimalRegisterSuccessState();
+  _AdoptedPetState createState() => _AdoptedPetState();
 }
 
-class _AnimalRegisterSuccessState extends State<AnimalRegisterSuccess> {
+class _AdoptedPetState extends State<AdoptedPet> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Cadastro do Animal", style: TextStyle(color: const Color(0xff434343), fontSize: 20, fontFamily: 'Roboto-Medium')),
+        title: Text("Parabéns!", style: TextStyle(color: const Color(0xff434343), fontSize: 20, fontFamily: 'Roboto-Medium')),
         backgroundColor: const Color(0xffffd358),
         iconTheme: IconThemeData(color: const Color(0xff434343)),
       ),
@@ -38,36 +38,24 @@ class _AnimalRegisterSuccessState extends State<AnimalRegisterSuccess> {
                 ),
 
                 SizedBox(height: 50),
-                Text("O cadastro do seu pet foi realizado com sucesso!",
+                Text("Seu Pet foi adotado! Entre em contato com o novo dono para combinar os detalhes!",
                     style: TextStyle(
                         fontFamily: 'Roboto-Regular',
                         fontSize: 16,
                         color: const Color(0xff757575)),
                     textAlign: TextAlign.center),
-
-                SizedBox(height: 15),
-                Text("Certifique-se que permitiu o envio de notificações por push "
-                    "no campo privacidade do menu configurações do aplicativo. "
-                    "Assim, poderemos te avisar assim que alguém interessado "
-                    "entrar em contato!",
-                    style: TextStyle(
-                        fontFamily: 'Roboto-Regular',
-                        fontSize: 16,
-                        color: const Color(0xff757575)),
-                    textAlign: TextAlign.center
-                ),
               ],
             ),
 
             Container(
               alignment: Alignment.bottomCenter,
               child: MaterialButton(
-                  color: const Color(0xffffd358),
-                  textColor: const Color(0xff434343),
-                  minWidth: 232,
-                  height: 40,
-                  child: Text("MEUS PETS"),
-                  onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => MyPetsScreen())),
+                color: const Color(0xffffd358),
+                textColor: const Color(0xff434343),
+                minWidth: 232,
+                height: 40,
+                child: Text("VOLTAR PARA HOME"),
+                onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Home())),
               ),
             ),
 
@@ -219,4 +207,4 @@ class _AnimalRegisterSuccessState extends State<AnimalRegisterSuccess> {
         );
     }
   }
-  }
+}

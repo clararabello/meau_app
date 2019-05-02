@@ -1,3 +1,8 @@
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:first_project/ui/screens/animal_adopt_success.dart';
+import 'package:first_project/ui/screens/animal_index.dart';
+import 'package:first_project/ui/screens/animal_register_success.dart';
+import 'package:first_project/ui/screens/interesteds_screen.dart';
 import 'package:first_project/ui/screens/user_view.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -15,10 +20,11 @@ class AnimalView extends StatefulWidget {
 
 }
 
-class _AnimalViewState extends State<AnimalView>{
+class _AnimalViewState extends State<AnimalView> {
   Map<String, List<String>> animalData = Map<String, List<String>>();
   Map<String, String> ownerData = Map<String, String>();
 
+  @override
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: loadAnimalData(),
@@ -40,7 +46,6 @@ class _AnimalViewState extends State<AnimalView>{
                   onPressed: () => Navigator.pop(context),
               )),
 
-              drawer: returnBar(),
               body: Container(
                   child: ListView(children: <Widget>[
                     new Stack(
@@ -334,52 +339,14 @@ class _AnimalViewState extends State<AnimalView>{
                       ],
                     ),
               ])));
+        else
+          return new Container();
       },
     );
   }
 
   favoritar() {
     Firestore.instance.collection('animals').document(widget.animalId).updateData({'favoritedBy': session.currentUser.uid});
-  }
-
-  Widget returnBar() {
-    if (session.currentUser == null) {
-      return SizedBox(height: 0);
-    } else {
-      return new Drawer(
-          child: new Column(children: <Widget>[
-        new UserAccountsDrawerHeader(
-          accountName: Text(session.userData["name"]),
-          accountEmail: Text(session.currentUser.email),
-          currentAccountPicture: new Container(
-              width: 360.0,
-              decoration: new BoxDecoration(
-                  shape: BoxShape.circle,
-                  image: new DecorationImage(
-                      fit: BoxFit.fill,
-                      image: new NetworkImage(
-                          "https://i.imgur.com/BoN9kdC.png")))),
-          decoration: BoxDecoration(color: const Color(0xffffd358)),
-        ),
-        new ListTile(
-          title: new Text('Adotar'),
-          onTap: () {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => UserView()));
-          },
-        ),
-        new Divider(),
-        new ListTile(
-          title: new Text('Home'),
-          onTap: () {
-            this.setState(() {
-              Navigator.pushNamed(context, '/home');
-            });
-          },
-        ),
-        new Divider(),
-      ]));
-    }
   }
 
   loadAnimalData() {
@@ -416,8 +383,8 @@ class _AnimalViewState extends State<AnimalView>{
             .toList());
   }
 
-  Widget showButtons(AsyncSnapshot animal) {
-    if (session.currentUser != null && animal.data["userUid"] == session.currentUser.uid)
+  showButtons(AsyncSnapshot animal) {
+    if (session.currentUser != null && animal.data["userUid"] == session.currentUser.uid && animal.data["isAvailable"])
       return Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
@@ -427,7 +394,7 @@ class _AnimalViewState extends State<AnimalView>{
               minWidth: 148,
               height: 40,
               child: Text("VER INTERESSADOS", style: TextStyle(fontSize: 12)),
-              onPressed: () => print("ver interessados")
+              onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => interestedsScreen(animalId: widget.animalId))),
           ),
           SizedBox(width: 16),
           MaterialButton(
@@ -436,19 +403,116 @@ class _AnimalViewState extends State<AnimalView>{
               minWidth: 148,
               height: 40,
               child: Text("REMOVER PET", style: TextStyle(fontSize: 12)),
-              onPressed: () => print("remover pet")
+              onPressed: () => print("remover pet") //TODO - implementar remover pet
           )
         ],
       );
-    else
-      return MaterialButton(
-        color: const Color(0xfffdcf58),
-        textColor: const Color(0xff434343),
-        minWidth: 280,
-        height: 40,
-        child: Text("PRETENDO ${widget.tipo}", style: TextStyle(fontSize: 12)),
-        onPressed: () => print("Pretendo...")
-    );
+    else {
+      if (!animal.data["isAvailable"])
+        return Text("Este pet já foi adotado! ;)", textAlign: TextAlign.center);
+    if (session.currentUser != null)
+        return FutureBuilder(
+          future: interestAlreadyExist(session.currentUser.uid, widget.animalId),
+          builder: (context, AsyncSnapshot<bool> result) {
+            if (!result.hasData)
+              return Container(); // future still needs to be finished (loading)
+            if (result.data) // result.data is the returned bool from doesNameAlreadyExists
+              return Text("Você já mostrou interesse por esse pet! Agora é só esperar a resposta do dono ;)",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                  fontFamily: 'Roboto-Regular',
+                  fontSize: 14,
+                  color: const Color(0xff434343)));
+            else
+              return MaterialButton(
+                  color: const Color(0xfffdcf58),
+                  textColor: const Color(0xff434343),
+                  minWidth: 280,
+                  height: 40,
+                  child: Text("PRETENDO ${widget.tipo}", style: TextStyle(fontSize: 12)),
+                  onPressed: () async {
+                    showDialog(
+                        context: context,
+                        barrierDismissible: true,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text("Atenção"),
+                            elevation: 0,
+                            backgroundColor: const Color(0xffffffff),
+                            content: SingleChildScrollView(
+                                child: ListBody(
+                                  children: <Widget>[
+                                    Text("Tem certeza de que deseja fazer um pedido para ${widget.tipo.toLowerCase()} este pet?", textAlign: TextAlign.center)
+                                  ],
+                                )
+                            ),
+                            actions: <Widget>[
+                              Align(
+                                alignment: Alignment.topLeft,
+                                child: FlatButton(
+                                  child: Text("Voltar"),
+                                  onPressed: () => Navigator.pop(context),
+                                ),
+                              ),
+
+                              Align(
+                                alignment: Alignment.topRight,
+                                child: FlatButton(
+                                  child: Text("Confirmar"),
+                                  onPressed: () {
+                                    try {
+                                      DocumentReference interested = Firestore.instance.collection(
+                                          'interesteds').document();
+                                      interested.setData({
+                                        'interestedUid': session.currentUser.uid,
+                                        'animalUid': widget.animalId,
+                                        'type': widget.tipo,
+                                        'interestedName': session.userData["name"],
+                                        'animalName': animal.data["animalName"]
+                                      });
+
+                                      print("Interest registered.");
+                                      Navigator.push(context, MaterialPageRoute(
+                                          builder: (context) => AnimalAdoptSuccess()));
+                                    }
+                                    catch (e) {
+                                      print("Error registering interest: $e");
+                                    }
+                                  },
+                                ),
+                              ),
+
+                            ],
+                          );
+                        }
+                    );
+                  }
+              );
+          },
+        );
+      else
+        return new Column(
+          children: <Widget>[
+            Text("Você precisa estar logado para mostrar interesse em um pet!", textAlign: TextAlign.center),
+            FlatButton(
+              textColor: const Color(0xff88c9bf),
+              onPressed: () => Navigator.pushNamed(context, '/login'),
+              child: Text("login")
+            ),
+          ],
+        );
+    }
+  }
+
+  Future<bool> interestAlreadyExist(String person, String animal) async {
+    final QuerySnapshot result = await Firestore.instance
+        .collection('interesteds')
+        .where('interestedUid', isEqualTo: person)
+        .where('animalUid', isEqualTo: animal)
+        .limit(1)
+        .getDocuments();
+    final List<DocumentSnapshot> documents = result.documents;
+    return documents.length >= 1;
   }
 
   Widget showDemands(AsyncSnapshot animal) {

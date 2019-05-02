@@ -28,13 +28,6 @@ class _AnimalRegisterScreenState extends State<AnimalRegisterScreen> {
   Dialogs dialogs = new Dialogs();
   File sampleImage;
 
-  Future getImage() async {
-    var tempImage = await ImagePicker.pickImage(source: ImageSource.gallery);
-
-  setState(() {
-  sampleImage = tempImage;
-  });}
-
   String _especie, _sexo, _porte, _idade, _periodoAcompanhamento;
   List<String> _temperamento, _auxilioFinanceiro;
   List<String> _saude = ['a'], _tipoCadastro = ['a'], _tiposAjuda = ['a'], _exigenciasAdocao = ['a'], _exigenciasApadrinhamento = ['a'];
@@ -524,7 +517,7 @@ class _AnimalRegisterScreenState extends State<AnimalRegisterScreen> {
          'objects': objectController.text, 'medicine': medicineController.text, 'adoptionRequirements': _exigenciasAdocao == ["a"] ? [""] : _exigenciasAdocao,
          'trackingPeriod': _periodoAcompanhamento, 'sponsorshipRequirements': _exigenciasApadrinhamento == ["a"] ? [""] : _exigenciasApadrinhamento,
          'financialAid': _auxilioFinanceiro, 'registerType': _tipoCadastro == ["a"] ? [""] : _tipoCadastro, 'neighbourhood': neighbourhoodController.text,
-         'state': stateController.text, 'url': photoUrl.toString(), 'favoritedBy': ""
+         'state': stateController.text, 'url': photoUrl.toString(), 'isAvailable': true, 'adoptedBy': "", 'favoritedBy': "",
        });
 
        print("Animal registered.");
@@ -549,6 +542,46 @@ class _AnimalRegisterScreenState extends State<AnimalRegisterScreen> {
     neighbourhoodController.text = "";
   }
 
+  Future<void> getImage() {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            content: new SingleChildScrollView(
+              child: new ListBody(
+                children: <Widget>[
+                  GestureDetector(
+                    child: new Text('Câmera'),
+                    onTap: openCamera,
+                  ),
+                  Padding(padding: EdgeInsets.all(8.0)),
+                  GestureDetector(
+                    child: new Text('Galeria'),
+                    onTap: openGallery,
+                  ),
+                ],
+              ),
+            ),
+          );
+        }
+    );
+  }
+
+  Future openGallery() async {
+    var tempImage = await ImagePicker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      sampleImage = tempImage;
+    });
+    Navigator.pop(context);
+  }
+
+  Future openCamera() async {
+    var tempImage = await ImagePicker.pickImage(source: ImageSource.camera);
+    setState(() {
+      sampleImage = tempImage;
+    });
+    Navigator.pop(context);
+  }
 }
 
 

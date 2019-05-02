@@ -1,10 +1,15 @@
+import 'package:first_project/auth.dart';
+import 'package:first_project/ui/screens/adopted_pets.dart';
 import 'package:first_project/ui/screens/animal_index.dart';
+import 'package:first_project/ui/screens/favorites.dart';
+import 'package:first_project/ui/screens/home.dart';
 import 'package:first_project/ui/screens/my_pets.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:first_project/session.dart';
 
+//TODO - implementar view de usuário (sem ser o currentUser)
 class UserView extends StatefulWidget {
   const UserView({Key key, this.user}) : super(key: key);
   final FirebaseUser user;
@@ -43,8 +48,8 @@ class _UserViewState extends State<UserView> {
                       decoration: new BoxDecoration(
                           shape: BoxShape.circle,
                           image: new DecorationImage(
-                              fit: BoxFit.fill,
-                              image: new NetworkImage("https://i.imgur.com/BoN9kdC.png")
+                              fit: BoxFit.cover,
+                              image: new NetworkImage(session.userData["profilePicture"])
                           )
                   )),
 
@@ -267,130 +272,133 @@ class _UserViewState extends State<UserView> {
     } else {
       if (session.userData.isNotEmpty)
         return new Drawer(
-            child: new Column(children: <Widget>[
-              new UserAccountsDrawerHeader(
-                accountName: Text(session.userData["name"]),
-                accountEmail: Text(session.currentUser.email),
-                currentAccountPicture: new Container(
-                    width: 112.0,
-                    height: 112.0,
-                    decoration: new BoxDecoration(
-                        shape: BoxShape.circle,
-                        image: new DecorationImage(
-                            fit: BoxFit.fill,
-                            image: new NetworkImage(
-                                "https://i.imgur.com/BoN9kdC.png")))),
-                decoration: BoxDecoration(color: const Color(0xff88c9bf)),
-              ),
-              new ListTile(
-                title: new Text('Meu perfil'),
-                onTap: () {
-                  Navigator.push(
-                      context, MaterialPageRoute(builder: (context) => UserView()));
-                },
-              ),
-              new Divider(),
-              new ListTile(
-                title: new Text('Home'),
-                onTap: () {
-                  this.setState(() {
-                    Navigator.pushNamed(context, '/home');
-                  });
-                },
-              ),
-              new Divider(),
-              new ListTile(
-                title: new Text('Cadastrar um Pet'),
-                onTap: () {
-                  this.setState(() {
-                    Navigator.pushNamed(context, '/animal_register');
-                  });
-                },
-              ),
-              new Divider(),
-              new ListTile(
-                title: new Text('Adotar um Pet'),
-                onTap: () {
-                  this.setState(() {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                AnimalIndexScreen(tipo: 'ADOTAR')));
-                  });
-                },
-              ),
-              new Divider(),
-              new ListTile(
-                title: new Text('Ajudar um Pet'),
-                onTap: () {
-                  this.setState(() {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                AnimalIndexScreen(tipo: 'AJUDAR')));
-                  });
-                },
-              ),
-              new Divider(),
-              new ListTile(
-                title: new Text('Apadrinhar um Pet'),
-                onTap: () {
-                  this.setState(() {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                AnimalIndexScreen(tipo: 'APADRINHAR')));
-                  });
-                },
-              ),
+            child: SingleChildScrollView(
+                child: new Column(children: <Widget>[
+                  new UserAccountsDrawerHeader(
+                    accountName: Text(session.userData["name"]),
+                    accountEmail: Text(session.currentUser.email),
+                    currentAccountPicture: new Container(
+                        width: 112.0,
+                        height: 112.0,
+                        decoration: new BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: new DecorationImage(
+                                fit: BoxFit.cover,
+                                image: new NetworkImage(session.userData["profilePicture"])
+                            )
+                        )),
+                    decoration: BoxDecoration(color: const Color(0xff88c9bf)),
+                  ),
+                  new ListTile(
+                    title: new Text('Home'),
+                    onTap: () {
+                      this.setState(() {
+                        Navigator.pushNamed(context, '/home');
+                      });
+                    },
+                  ),
+                  new Divider(),
+                  new ListTile(
+                    title: new Text('Meus Favoritos'),
+                    onTap: () {
+                      {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => Favorites())
+                        );}
+                    },
+                  ),
+                  new Divider(),
+                  new ListTile(
+                    title: new Text('Meu perfil'),
+                    onTap: () {
+                      Navigator.push(
+                          context, MaterialPageRoute(builder: (context) => UserView()));
+                    },
+                  ),
+                  new Divider(),
+                  new ListTile(
+                    title: new Text('Cadastrar um Pet'),
+                    onTap: () {
+                      this.setState(() {
+                        Navigator.pushNamed(context, '/animal_register');
+                      });
+                    },
+                  ),
+                  new Divider(),
+                  new ListTile(
+                    title: new Text('Adotar um Pet'),
+                    onTap: () {
+                      this.setState(() {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    AnimalIndexScreen(tipo: 'ADOTAR')));
+                      });
+                    },
+                  ),
+                  new Divider(),
+                  new ListTile(
+                    title: new Text('Ajudar um Pet'),
+                    onTap: () {
+                      this.setState(() {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    AnimalIndexScreen(tipo: 'AJUDAR')));
+                      });
+                    },
+                  ),
+                  new Divider(),
+                  new ListTile(
+                    title: new Text('Apadrinhar um Pet'),
+                    onTap: () {
+                      this.setState(() {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    AnimalIndexScreen(tipo: 'APADRINHAR')));
+                      });
+                    },
+                  ),
 
-              new Divider(),
-              new ListTile(
-                title: new Text('Meus Pets'),
-                onTap: () {
-                  this.setState(() {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => MyPetsScreen()));
-                  });
-                },
-              ),
-            ]));
+                  new Divider(),
+                  new ListTile(
+                    title: new Text('Meus Pets'),
+                    onTap: () {
+                      this.setState(() {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => MyPetsScreen()));
+                      });
+                    },
+                  ),
+                  new Divider(),
+                  new ListTile(
+                    title: new Text('Meus Pets Adotados'),
+                    onTap: () {
+                      this.setState(() {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => AdoptedPets()));
+                      });
+                    },
+                  ),
+                  new Divider(),
+                  new ListTile(
+                    title: new Text('Logout'),
+                    onTap: () {
+                      AuthService().signOut();
+                      Navigator.push(
+                          context, MaterialPageRoute(builder: (context) => Home()));
+                    },
+                  ),
+
+                ])));
       else
         return new SizedBox(
           height: 0,
         );
     }
-  }
-
-  Widget returnName(){
-    String kk="ops";
-    //print("aaaaaaaa + " + Firestore.instance.collection("users").snapshots().toList().toString());
-    Firestore.instance
-        .collection('users')
-        .where("name", isEqualTo: "Koda nascimento")
-        .snapshots()
-        .listen((data) => data.documents.forEach((doc) => print("bbb " + doc["city"])));
-    return Text(kk);
-
-    //((snapshot) => snapshot.data["name"]);
-    //((snapshot) => print(snapshot.data["name"]));
-   /* StreamBuilder<DocumentSnapshot>(
-      stream: Firestore.instance
-          .collection('users')
-          .document(session.currentUser.uid)
-          .snapshots(),
-      builder:
-          (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-        if (snapshot.hasError) {
-          return snapshot.error;
-        } else if (snapshot.hasData) {
-          return snapshot.data['name'];
-        }
-        //return LinearProgressIndicator();
-      },
-    );*/
   }
 
 }
