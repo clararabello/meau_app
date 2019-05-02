@@ -47,7 +47,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         key: _formKey,
         child: ListView(
           children: <Widget>[
-            
+
             SizedBox(height: 16.0),
 
             new Container(
@@ -260,42 +260,45 @@ class _RegisterScreenState extends State<RegisterScreen> {
             ),
 
             SizedBox(height: 10),
-            new GestureDetector(
-              child: new Container(
-                  width: 400,
-                  height: 150,
-                  color: const Color(0xfff1f2f2),
-                  child:
-                  sampleImage == null ?
-                  Column(
-                    children: <Widget>[
-                      SizedBox(height: 50),
-                      Icon(Icons.control_point, color: const Color(0xff757575)),
-                      Text("adicionar foto")
-                    ],
-                  )
-                      :
-                  Column(
-                    children: <Widget>[
-                      // SizedBox(height: 50),
-                      // Icon(Icons.check_circle_outline, color: const Color(0xff757575)),
-                      // Text("imagem adicionada!")
-                      new Container(
-                          height: 150,
-                          decoration: new BoxDecoration(
-                              shape: BoxShape.rectangle,
-                              image: new DecorationImage(
-                                  fit: BoxFit.scaleDown,
-                                  alignment: FractionalOffset.topCenter,
-                                  image: FileImage(sampleImage)))
-                      )
-                    ],
-                  )
+            new Padding(
+              padding: EdgeInsets.all(20),
+              child: new GestureDetector(
+                child: new Container(
+                    width: 400,
+                    height: 150,
+                    color: const Color(0xfff1f2f2),
+                    child:
+                    sampleImage == null ?
+                    Column(
+                      children: <Widget>[
+                        SizedBox(height: 50),
+                        Icon(Icons.control_point, color: const Color(0xff757575)),
+                        Text("adicionar foto")
+                      ],
+                    )
+                        :
+                    Column(
+                      children: <Widget>[
+                        // SizedBox(height: 50),
+                        // Icon(Icons.check_circle_outline, color: const Color(0xff757575)),
+                        // Text("imagem adicionada!")
+                        new Container(
+                            height: 150,
+                            decoration: new BoxDecoration(
+                                shape: BoxShape.rectangle,
+                                image: new DecorationImage(
+                                    fit: BoxFit.scaleDown,
+                                    alignment: FractionalOffset.topCenter,
+                                    image: FileImage(sampleImage)))
+                        )
+                      ],
+                    )
+                ),
+                onTap: getImage,
               ),
-              onTap: getImage,
             ),
 
-            SizedBox(height: 32),
+            SizedBox(height: 20),
 
             Column(
                 children:<Widget>[
