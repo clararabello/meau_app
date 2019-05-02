@@ -23,7 +23,10 @@ class _interestedsScreenState extends State<interestedsScreen> {
                   title: StreamBuilder(
                     stream: loadAnimalData(),
                     builder: (context, animal) {
-                      return Text("Interessados em ${animal.data["animalName"]}",
+                      if (!animal.hasData)
+                        return Text("");
+                      else
+                        return Text("Interessados em ${animal.data["animalName"]}",
                           style: TextStyle(
                               color: const Color(0xff434343),
                               fontSize: 20,

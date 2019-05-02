@@ -154,6 +154,7 @@ class _MyPetsScreenState extends State<MyPetsScreen> {
                         )),
                     decoration: BoxDecoration(color: const Color(0xff88c9bf)),
                   ),
+
                   new ListTile(
                     title: new Text('Home'),
                     onTap: () {
@@ -162,18 +163,9 @@ class _MyPetsScreenState extends State<MyPetsScreen> {
                       });
                     },
                   ),
+
                   new Divider(),
-                  new ListTile(
-                    title: new Text('Meus Favoritos'),
-                    onTap: () {
-                      {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => Favorites())
-                        );}
-                    },
-                  ),
-                  new Divider(),
+
                   new ListTile(
                     title: new Text('Meu perfil'),
                     onTap: () {
@@ -181,56 +173,9 @@ class _MyPetsScreenState extends State<MyPetsScreen> {
                           context, MaterialPageRoute(builder: (context) => UserView()));
                     },
                   ),
-                  new Divider(),
-                  new ListTile(
-                    title: new Text('Cadastrar um Pet'),
-                    onTap: () {
-                      this.setState(() {
-                        Navigator.pushNamed(context, '/animal_register');
-                      });
-                    },
-                  ),
-                  new Divider(),
-                  new ListTile(
-                    title: new Text('Adotar um Pet'),
-                    onTap: () {
-                      this.setState(() {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    AnimalIndexScreen(tipo: 'ADOTAR')));
-                      });
-                    },
-                  ),
-                  new Divider(),
-                  new ListTile(
-                    title: new Text('Ajudar um Pet'),
-                    onTap: () {
-                      this.setState(() {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    AnimalIndexScreen(tipo: 'AJUDAR')));
-                      });
-                    },
-                  ),
-                  new Divider(),
-                  new ListTile(
-                    title: new Text('Apadrinhar um Pet'),
-                    onTap: () {
-                      this.setState(() {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    AnimalIndexScreen(tipo: 'APADRINHAR')));
-                      });
-                    },
-                  ),
 
                   new Divider(),
+
                   new ListTile(
                     title: new Text('Meus Pets'),
                     onTap: () {
@@ -239,7 +184,74 @@ class _MyPetsScreenState extends State<MyPetsScreen> {
                       });
                     },
                   ),
+
                   new Divider(),
+
+                  new ExpansionTile(
+                      backgroundColor: const Color(0xff88c9bf),
+                      title: Text("Atalhos"),
+                      children: <Widget>[
+                        new ListTile(
+                          title: new Text('Cadastrar um Pet'),
+                          onTap: () {
+                            this.setState(() {
+                              Navigator.pushNamed(context, '/animal_register');
+                            });
+                          },
+                        ),
+                        new ListTile(
+                          title: new Text('Adotar um Pet'),
+                          onTap: () {
+                            this.setState(() {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          AnimalIndexScreen(tipo: 'ADOTAR')));
+                            });
+                          },
+                        ),
+                        new ListTile(
+                          title: new Text('Ajudar um Pet'),
+                          onTap: () {
+                            this.setState(() {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          AnimalIndexScreen(tipo: 'AJUDAR')));
+                            });
+                          },
+                        ),
+                        new ListTile(
+                          title: new Text('Apadrinhar um Pet'),
+                          onTap: () {
+                            this.setState(() {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          AnimalIndexScreen(tipo: 'APADRINHAR')));
+                            });
+                          },
+                        ),
+                      ]
+                  ),
+
+                  new Divider(),
+
+                  new ListTile(
+                    title: new Text('Meus Favoritos'),
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => Favorites())
+                      );
+                    },
+                  ),
+
+                  new Divider(),
+
                   new ListTile(
                     title: new Text('Meus Pets Adotados'),
                     onTap: () {
@@ -248,7 +260,9 @@ class _MyPetsScreenState extends State<MyPetsScreen> {
                       });
                     },
                   ),
+
                   new Divider(),
+
                   new ListTile(
                     title: new Text('Logout'),
                     onTap: () {

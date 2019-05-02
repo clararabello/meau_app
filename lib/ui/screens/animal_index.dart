@@ -1,3 +1,4 @@
+import 'package:first_project/session.dart';
 import 'package:first_project/ui/screens/animal_view.dart';
 import 'package:first_project/ui/screens/home.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,8 @@ class AnimalIndexScreen extends StatefulWidget {
 }
 
 class _AnimalIndexScreenState extends State<AnimalIndexScreen> {
+  IconData _icon = Icons.favorite_border;
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
@@ -77,10 +80,28 @@ class _AnimalIndexScreenState extends State<AnimalIndexScreen> {
                                           Positioned(
                                             top: 5,
                                             left: 370,
-                                            child: new Icon(
-                                              Icons.favorite_border,
-                                              color: const Color(0xff434343),
-                                            ),
+                                                child: new Icon(
+                                                  Icons.favorite_border,
+                                                  color: const Color(0xff434343),
+                                                )
+
+                                            /*IconButton(
+                                                  icon: Icon(_icon),
+                                                  color: const Color(0xff434343),
+                                                  onPressed: () {
+                                                    setState(() {
+                                                      if (_icon == Icons.favorite_border) {
+                                                        favoritar(animal.data.documentID);
+                                                        _icon = Icons.favorite;
+                                                      }
+                                                      else {
+                                                        desfavoritar(animal.data.documentID);
+                                                        _icon = Icons.favorite_border;
+                                                      }
+                                                    });
+                                                  },
+                                                ),*/
+
                                           )
                                         ],
                                       ),
@@ -153,4 +174,21 @@ class _AnimalIndexScreenState extends State<AnimalIndexScreen> {
     else
       return "Ajudar";
   }
-}
+
+  favoritar(String animalId) {
+    if (session.currentUser != null)
+      Firestore.instance.collection('favorites').document()
+        .setData({'animalUid': animalId, 'userUid': session.currentUser.uid});
+    }
+
+  desfavoritar(String animalId) {
+    if (session.currentUser != null)
+      Firestore.instance.collection('favorites').where('animalUid', isEqualTo: animalId).where('userUid', isEqualTo: session.currentUser.uid)
+        .getDocuments().then((snapshot) {
+          for (DocumentSnapshot ds in snapshot.documents){
+            ds.reference.delete();
+          }
+        });
+  }
+
+  }

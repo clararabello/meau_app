@@ -32,7 +32,7 @@ class _HomeState extends State<Home> {
           child: Column(
             children: <Widget>[
               Text(
-                  // texto "Olá!"
+                // texto "Olá!"
                   'Olá!',
                   style: TextStyle(
                       fontFamily: 'Courgette-Regular',
@@ -40,9 +40,9 @@ class _HomeState extends State<Home> {
                       color: const Color(0xffffd358))),
               SizedBox(height: 52.0),
               Text(
-                  // Texto inicial
+                // Texto inicial
                   'Bem vindo ao Meau! \n Aqui você pode adotar, doar e ajudar \n '
-                  'cães e gatos com facilidade. \n Qual o seu interesse?',
+                      'cães e gatos com facilidade. \n Qual o seu interesse?',
                   style: TextStyle(
                       fontFamily: 'Roboto-Regular',
                       fontSize: 16,
@@ -50,7 +50,7 @@ class _HomeState extends State<Home> {
                   textAlign: TextAlign.center),
               SizedBox(height: 48.0),
               MaterialButton(
-                  // Botão adotar
+                // Botão adotar
                   color: const Color(0xffffd358),
                   textColor: const Color(0xff434343),
                   minWidth: 232,
@@ -63,7 +63,7 @@ class _HomeState extends State<Home> {
                               AnimalIndexScreen(tipo: "ADOTAR")))),
               SizedBox(height: 12.0),
               MaterialButton(
-                  // Botão ajudar
+                // Botão ajudar
                   color: const Color(0xffffd358),
                   textColor: const Color(0xff434343),
                   minWidth: 232,
@@ -106,7 +106,7 @@ class _HomeState extends State<Home> {
       return SizedBox(height: 0);
     } catch (e) {
       return FlatButton(
-          // link login
+        // link login
 
           textColor: const Color(0xff88c9bf),
           onPressed: () {
@@ -141,7 +141,7 @@ class _HomeState extends State<Home> {
       if (widget.user.email == null) {}
 
       return FlatButton(
-          // link logout
+        // link logout
 
           textColor: const Color(0xff88c9bf),
           onPressed: () {
@@ -155,142 +155,156 @@ class _HomeState extends State<Home> {
     }
   }
 
- Widget returnBar() {
+  Widget returnBar() {
     if (session.currentUser == null) {
       return new Drawer(
           child: new Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-            Center(
-              child: Text("Você ainda não está logado :'("),
-            )
-          ]));
+                Center(
+                  child: Text("Você ainda não está logado :'("),
+                )
+              ]));
     } else {
       if (session.userData.isNotEmpty)
         return new Drawer(
-          child: SingleChildScrollView(
-            child: new Column(children: <Widget>[
-          new UserAccountsDrawerHeader(
-            accountName: Text(session.userData["name"]),
-            accountEmail: Text(session.currentUser.email),
-            currentAccountPicture: new Container(
-                width: 112.0,
-                height: 112.0,
-                decoration: new BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: new DecorationImage(
-                        fit: BoxFit.cover,
-                        image: new NetworkImage(session.userData["profilePicture"])
-                    )
-                )),
-            decoration: BoxDecoration(color: const Color(0xff88c9bf)),
-          ),
-          new ListTile(
-            title: new Text('Home'),
-            onTap: () {
-              this.setState(() {
-                Navigator.pushNamed(context, '/home');
-              });
-            },
-          ),
-          new Divider(),
-          new ListTile(
-            title: new Text('Meus Favoritos'),
-            onTap: () {
-               {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Favorites())
-                );}
-            },
-          ),
-          new Divider(),
-              new ListTile(
-                title: new Text('Meu perfil'),
-                onTap: () {
-                  Navigator.push(
-                      context, MaterialPageRoute(builder: (context) => UserView()));
-                },
-              ),
-            new Divider(),
-            new ListTile(
-            title: new Text('Cadastrar um Pet'),
-            onTap: () {
-              this.setState(() {
-                Navigator.pushNamed(context, '/animal_register');
-              });
-            },
-          ),
-          new Divider(),
-          new ListTile(
-            title: new Text('Adotar um Pet'),
-            onTap: () {
-              this.setState(() {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            AnimalIndexScreen(tipo: 'ADOTAR')));
-              });
-            },
-          ),
-          new Divider(),
-          new ListTile(
-            title: new Text('Ajudar um Pet'),
-            onTap: () {
-              this.setState(() {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            AnimalIndexScreen(tipo: 'AJUDAR')));
-              });
-            },
-          ),
-          new Divider(),
-          new ListTile(
-            title: new Text('Apadrinhar um Pet'),
-            onTap: () {
-              this.setState(() {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            AnimalIndexScreen(tipo: 'APADRINHAR')));
-              });
-            },
-          ),
+            child: SingleChildScrollView(
+                child: new Column(children: <Widget>[
+                  new UserAccountsDrawerHeader(
+                    accountName: Text(session.userData["name"]),
+                    accountEmail: Text(session.currentUser.email),
+                    currentAccountPicture: new Container(
+                        width: 112.0,
+                        height: 112.0,
+                        decoration: new BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: new DecorationImage(
+                                fit: BoxFit.cover,
+                                image: new NetworkImage(session.userData["profilePicture"])
+                            )
+                        )),
+                    decoration: BoxDecoration(color: const Color(0xff88c9bf)),
+                  ),
 
-              new Divider(),
-              new ListTile(
-                title: new Text('Meus Pets'),
-                onTap: () {
-                  this.setState(() {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => MyPetsScreen()));
-                  });
-                },
-              ),
-              new Divider(),
-              new ListTile(
-                title: new Text('Meus Pets Adotados'),
-                onTap: () {
-                  this.setState(() {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => AdoptedPets()));
-                  });
-                },
-              ),
-              new Divider(),
-              new ListTile(
-                title: new Text('Logout'),
-                onTap: () {
-                  AuthService().signOut();
-                  Navigator.push(
-                      context, MaterialPageRoute(builder: (context) => Home()));
-                },
-              ),
+                  new ListTile(
+                    title: new Text('Home'),
+                    onTap: () {
+                      this.setState(() {
+                        Navigator.pushNamed(context, '/home');
+                      });
+                    },
+                  ),
 
-            ])));
+                  new Divider(),
+
+                  new ListTile(
+                    title: new Text('Meu perfil'),
+                    onTap: () {
+                      Navigator.push(
+                          context, MaterialPageRoute(builder: (context) => UserView()));
+                    },
+                  ),
+
+                  new Divider(),
+
+                  new ListTile(
+                    title: new Text('Meus Pets'),
+                    onTap: () {
+                      this.setState(() {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => MyPetsScreen()));
+                      });
+                    },
+                  ),
+
+                  new Divider(),
+
+                  new ExpansionTile(
+                    backgroundColor: const Color(0xff88c9bf),
+                      title: Text("Atalhos"),
+                      children: <Widget>[
+                        new ListTile(
+                          title: new Text('Cadastrar um Pet'),
+                          onTap: () {
+                            this.setState(() {
+                              Navigator.pushNamed(context, '/animal_register');
+                            });
+                          },
+                        ),
+                        new ListTile(
+                          title: new Text('Adotar um Pet'),
+                          onTap: () {
+                            this.setState(() {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          AnimalIndexScreen(tipo: 'ADOTAR')));
+                            });
+                          },
+                        ),
+                        new ListTile(
+                          title: new Text('Ajudar um Pet'),
+                          onTap: () {
+                            this.setState(() {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          AnimalIndexScreen(tipo: 'AJUDAR')));
+                            });
+                          },
+                        ),
+                        new ListTile(
+                          title: new Text('Apadrinhar um Pet'),
+                          onTap: () {
+                            this.setState(() {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          AnimalIndexScreen(tipo: 'APADRINHAR')));
+                            });
+                          },
+                        ),
+                      ]
+                  ),
+
+                  new Divider(),
+
+                  new ListTile(
+                    title: new Text('Meus Favoritos'),
+                    onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => Favorites())
+                        );
+                    },
+                  ),
+
+                  new Divider(),
+
+                  new ListTile(
+                    title: new Text('Meus Pets Adotados'),
+                    onTap: () {
+                      this.setState(() {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => AdoptedPets()));
+                      });
+                    },
+                  ),
+
+                  new Divider(),
+
+                  new ListTile(
+                    title: new Text('Logout'),
+                    onTap: () {
+                      AuthService().signOut();
+                      Navigator.push(
+                          context, MaterialPageRoute(builder: (context) => Home()));
+                    },
+                  ),
+
+                ])));
       else
         return new SizedBox(
           height: 0,

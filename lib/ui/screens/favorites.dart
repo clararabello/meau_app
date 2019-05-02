@@ -144,6 +144,6 @@ class _FavoritesState extends State<Favorites> {
 
   loadFavorites() => Firestore.instance
       .collection('animals')
-      .where('favoritedBy', isEqualTo: session.currentUser.uid)
+      .where('favoritedBy', arrayContains: session.currentUser.uid)
       .snapshots();
 }
