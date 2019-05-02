@@ -1,4 +1,3 @@
-import 'package:first_project/session.dart';
 import 'package:first_project/ui/screens/dialogs.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

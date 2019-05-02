@@ -1,14 +1,10 @@
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:first_project/ui/screens/animal_adopt_success.dart';
-import 'package:first_project/ui/screens/animal_index.dart';
-import 'package:first_project/ui/screens/animal_register_success.dart';
 import 'package:first_project/ui/screens/interesteds_screen.dart';
-import 'package:first_project/ui/screens/user_view.dart';
+import 'package:first_project/ui/screens/my_pets.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:first_project/session.dart';
-import 'package:first_project/ui/screens/animal_register.dart';
-
 
 class AnimalView extends StatefulWidget {
   final String animalId, tipo;
@@ -403,7 +399,7 @@ class _AnimalViewState extends State<AnimalView> {
               minWidth: 148,
               height: 40,
               child: Text("REMOVER PET", style: TextStyle(fontSize: 12)),
-              onPressed: () => print("remover pet") //TODO - implementar remover pet
+              onPressed: () => remover(widget.animalId)
           )
         ],
       );
@@ -624,5 +620,57 @@ class _AnimalViewState extends State<AnimalView> {
       );
     else
       return new SizedBox(height: 0);
+  }
+
+  remover(String animalId) {
+    showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Atenção!"),
+            elevation: 0,
+            backgroundColor: const Color(0xffffffff),
+            content: SingleChildScrollView(
+                child: ListBody(
+                  children: <Widget>[
+                    Text("Tem certeza de que deseja excluir este pet do sistema?", textAlign: TextAlign.center)
+                  ],
+                )
+            ),
+            actions: <Widget>[
+              Align(
+                alignment: Alignment.topLeft,
+                child: FlatButton(
+                  child: Text("Voltar"),
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ),
+
+              Align(
+                alignment: Alignment.topRight,
+                child: FlatButton(
+                  child: Text("Confirmar"),
+                  onPressed: () {
+                    try {
+                      Firestore.instance.collection('interesteds').where('animalUid', isEqualTo: animalId).getDocuments().then((snapshot) {
+                        for (DocumentSnapshot ds in snapshot.documents){
+                          ds.reference.delete();
+                        }});
+                      FirebaseStorage.instance.ref().child(animalId).delete();
+                      Firestore.instance.collection('animals').document(animalId).delete();
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => MyPetsScreen()));
+                    }
+                    catch(e) {
+                      print("Error deleting animal: $e");
+                    }
+                  },
+                ),
+              ),
+
+            ],
+          );
+        }
+    );
   }
 }

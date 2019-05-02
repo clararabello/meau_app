@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:first_project/session.dart';
 import 'package:first_project/ui/screens/dialogs.dart';
@@ -249,7 +248,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
             SizedBox(height: 28.0),
 
-            //TODO - implementar foto de perfil de usuário e câmera
             new Container(
               alignment: Alignment.centerLeft,
               padding: new EdgeInsets.only( left: 28.0),

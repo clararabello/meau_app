@@ -1,9 +1,7 @@
 import 'package:first_project/ui/screens/interested_view.dart';
-import 'package:first_project/ui/screens/user_view.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-//TODO - colocar botão para fechar processo com usuário
 class interestedsScreen extends StatefulWidget {
   interestedsScreen({Key key, @required this.animalId}) : super(key: key);
   final String animalId;
