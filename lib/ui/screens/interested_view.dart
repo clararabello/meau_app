@@ -1,9 +1,7 @@
-import 'package:first_project/ui/screens/animal_index.dart';
-import 'package:first_project/ui/screens/my_pets.dart';
-import 'package:first_project/ui/screens/user_view.dart';
+import 'package:first_project/session.dart';
+import 'package:first_project/ui/screens/dialogs.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:first_project/session.dart';
 
 class InterestedView extends StatefulWidget {
   const InterestedView({Key key, this.interestId}) : super(key: key);
@@ -13,6 +11,7 @@ class InterestedView extends StatefulWidget {
 }
 
 class _InterestedViewState extends State<InterestedView> {
+  var dialogs = new Dialogs();
   @override
   Widget build(BuildContext context) {
 
@@ -20,23 +19,25 @@ class _InterestedViewState extends State<InterestedView> {
       stream: loadInterestData(),
       builder: (context, interest) {
         if (!interest.hasData)
-          return new Column(
+          /*return new Column(
             children: <Widget>[
-              SizedBox(height: 50),
-              Text("Ainda não há usuários interessados nesse pet :("),
+
+              //SizedBox(height: 50),
             ],
-          );
+          );*/
+          return Text("");
         else
           return new StreamBuilder(
               stream: loadInterestedData(interest.data["interestedUid"]),
               builder: (context, interested) {
                 if (!interested.hasData)
-                  return new Column(
+                  /*return new Column(
                     children: <Widget>[
                       SizedBox(height: 50),
                       Text("Ainda não há usuários interessados nesse pet :("),
                     ],
-                  );
+                  );*/
+                  return Text("");
                 else
                   return Scaffold(
                     backgroundColor: const Color(0xfffafafa),
@@ -248,7 +249,7 @@ class _InterestedViewState extends State<InterestedView> {
                                                   minWidth: 150,
                                                   height: 40,
                                                   child: Text("ACEITAR"),
-                                                  onPressed: () => print("editar perfil")
+                                                  onPressed: () => aceitar(interest.data["animalUid"], interest.data["interestedUid"])
                                               ),
                                               SizedBox(width: 20),
                                               MaterialButton(
@@ -257,7 +258,7 @@ class _InterestedViewState extends State<InterestedView> {
                                                   minWidth: 150,
                                                   height: 40,
                                                   child: Text("RECUSAR"),
-                                                  onPressed: () => print("editar perfil")
+                                                  onPressed: () => recusar(interest.data["animalUid"], interest.data["interestedUid"])
                                               ),
                                             ],
                                           ),
@@ -293,6 +294,96 @@ class _InterestedViewState extends State<InterestedView> {
         .document(interestedId)
         .snapshots()
         .map((snap) => snap.data);
+  }
+
+  aceitar(String animalID, String userUID) {
+    showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Atenção"),
+            elevation: 0,
+            backgroundColor: const Color(0xffffffff),
+            content: SingleChildScrollView(
+                child: ListBody(
+                  children: <Widget>[
+                    Text("Tem certeza de que deseja aceitar este pedido?", textAlign: TextAlign.center)
+                  ],
+                )
+            ),
+            actions: <Widget>[
+              Align(
+                alignment: Alignment.topLeft,
+                child: FlatButton(
+                  child: Text("Voltar"),
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ),
+
+              Align(
+                alignment: Alignment.topRight,
+                child: FlatButton(
+                  child: Text("Confirmar"),
+                  onPressed: () {
+                    try {
+                      DocumentReference aceito = Firestore.instance.collection('accepteds').document();
+                      aceito.setData({'animalUid': animalID, 'userUid': userUID, 'date': Timestamp.fromDate(DateTime.now())
+                      });
+                      Firestore.instance.collection('animals').document(animalID).updateData({'isAvailable': false});
+                      Firestore.instance.collection('animals').document(animalID).updateData({'adoptedBy': userUID});
+                      Firestore.instance.collection('interesteds').where("animalUid", isEqualTo: animalID).getDocuments()
+                          .then((snapshot) {
+                        for (DocumentSnapshot ds in snapshot.documents){
+                          ds.reference.delete();
+                        }});
+                      Navigator.pushNamed(context, '/adopt_pet');
+                    }
+                    catch(e) {
+                      print("Error no pedidoo de adoção para animal: $e");
+                    }
+                  },
+                ),
+              ),
+
+            ],
+          );
+        }
+    );
+  }
+
+  recusar(String animalID, String userUID) {
+    showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Aviso"),
+            elevation: 0,
+            backgroundColor: const Color(0xffffffff),
+            content: SingleChildScrollView(
+                child: ListBody(
+                  children: <Widget>[
+                    Text("A solicitação foi recusada")
+                  ],
+                )
+            ),
+            actions: <Widget>[
+              FlatButton(
+                  onPressed: () {
+                    Firestore.instance.collection('interesteds').where('animalUid', isEqualTo: animalID).where('interestedUid', isEqualTo: userUID).getDocuments().then((snapshot){
+                      for (DocumentSnapshot ds in snapshot.documents){
+                        ds.reference.delete();
+                      }
+                    });
+                    Navigator.pushNamed(context, '/home');
+                  } ,
+                  child: Text("Ok")
+              )
+            ],
+          );
+        }
+    );
   }
 
 }

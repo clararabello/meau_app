@@ -26,6 +26,7 @@ class Session {
         userData["state"] = doc["state"];
         userData["telephone"] = doc["telephone"];
         userData["username"] = doc["username"];
+        userData["profilePicture"] = doc["profilePicture"];
       });//.onError((e) => print("erro: " + e.message));
       print("Data from ${currentUser.email} loaded.");
     }

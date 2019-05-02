@@ -1,3 +1,4 @@
+import 'package:first_project/auth.dart';
 import 'package:first_project/session.dart';
 import 'package:first_project/ui/screens/animal_index.dart';
 import 'package:first_project/ui/screens/home.dart';
@@ -63,7 +64,7 @@ class _AnimalAdoptSuccessState extends State<AnimalAdoptSuccess> {
                 textColor: const Color(0xff434343),
                 minWidth: 232,
                 height: 40,
-                child: Text("Voltar para Home"),
+                child: Text("VOLTAR PARA HOME"),
                 onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Home())),
               ),
             ),
@@ -98,25 +99,27 @@ class _AnimalAdoptSuccessState extends State<AnimalAdoptSuccess> {
                     decoration: new BoxDecoration(
                         shape: BoxShape.circle,
                         image: new DecorationImage(
-                            fit: BoxFit.fill,
-                            image: new NetworkImage(
-                                "https://i.imgur.com/BoN9kdC.png")))),
+                            fit: BoxFit.cover,
+                            image: new NetworkImage(session.userData["profilePicture"])
+                        )
+                    )),
                 decoration: BoxDecoration(color: const Color(0xff88c9bf)),
               ),
-              new ListTile(
-                title: new Text('Meu perfil'),
-                onTap: () {
-                  Navigator.push(
-                      context, MaterialPageRoute(builder: (context) => UserView()));
-                },
-              ),
-              new Divider(),
               new ListTile(
                 title: new Text('Home'),
                 onTap: () {
                   this.setState(() {
                     Navigator.pushNamed(context, '/home');
                   });
+                },
+              ),
+              new Divider(),
+
+              new ListTile(
+                title: new Text('Meu perfil'),
+                onTap: () {
+                  Navigator.push(
+                      context, MaterialPageRoute(builder: (context) => UserView()));
                 },
               ),
               new Divider(),
@@ -175,6 +178,15 @@ class _AnimalAdoptSuccessState extends State<AnimalAdoptSuccess> {
                   this.setState(() {
                     Navigator.push(context, MaterialPageRoute(builder: (context) => MyPetsScreen()));
                   });
+                },
+              ),
+              new Divider(),
+              new ListTile(
+                title: new Text('Logout'),
+                onTap: () {
+                  AuthService().signOut();
+                  Navigator.push(
+                      context, MaterialPageRoute(builder: (context) => Home()));
                 },
               ),
             ]));

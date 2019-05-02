@@ -1,3 +1,5 @@
+import 'package:first_project/ui/screens/adopt_pet.dart';
+import 'package:first_project/ui/screens/adopted_pets.dart';
 import 'package:first_project/ui/screens/animal_adopt_success.dart';
 import 'package:first_project/ui/screens/animal_index.dart';
 import 'package:first_project/ui/screens/animal_register.dart';
@@ -32,6 +34,8 @@ class MeauApp extends StatelessWidget {
         '/my_pets': (context) => MyPetsScreen(),
         '/animal_adopt_sucess': (context) => AnimalAdoptSuccess(),
         //'/interesteds': (context) => interestedsScreen(),
+        '/adopt_pet': (context) => AdoptedPet(),
+        '/adopted_pets': (context) => AdoptedPets(),
       },
     );
   }

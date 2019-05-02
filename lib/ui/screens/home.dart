@@ -1,4 +1,5 @@
 import 'package:first_project/session.dart';
+import 'package:first_project/ui/screens/adopted_pets.dart';
 import 'package:first_project/ui/screens/my_pets.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -144,7 +145,6 @@ class _HomeState extends State<Home> {
           textColor: const Color(0xff88c9bf),
           onPressed: () {
             AuthService().signOut();
-
             Navigator.push(
                 context, MaterialPageRoute(builder: (context) => Home()));
           },
@@ -178,19 +178,12 @@ class _HomeState extends State<Home> {
                 decoration: new BoxDecoration(
                     shape: BoxShape.circle,
                     image: new DecorationImage(
-                        fit: BoxFit.fill,
-                        image: new NetworkImage(
-                            "https://i.imgur.com/BoN9kdC.png")))),
+                        fit: BoxFit.cover,
+                        image: new NetworkImage(session.userData["profilePicture"])
+                    )
+                )),
             decoration: BoxDecoration(color: const Color(0xff88c9bf)),
           ),
-          new ListTile(
-            title: new Text('Meu perfil'),
-            onTap: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => UserView()));
-            },
-          ),
-          new Divider(),
           new ListTile(
             title: new Text('Home'),
             onTap: () {
@@ -200,7 +193,15 @@ class _HomeState extends State<Home> {
             },
           ),
           new Divider(),
-          new ListTile(
+              new ListTile(
+                title: new Text('Meu perfil'),
+                onTap: () {
+                  Navigator.push(
+                      context, MaterialPageRoute(builder: (context) => UserView()));
+                },
+              ),
+            new Divider(),
+            new ListTile(
             title: new Text('Cadastrar um Pet'),
             onTap: () {
               this.setState(() {
@@ -248,16 +249,35 @@ class _HomeState extends State<Home> {
             },
           ),
 
-          new Divider(),
-          new ListTile(
-            title: new Text('Meus Pets'),
-            onTap: () {
-              this.setState(() {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => MyPetsScreen()));
-              });
-            },
-          ),
-        ]));
+              new Divider(),
+              new ListTile(
+                title: new Text('Meus Pets'),
+                onTap: () {
+                  this.setState(() {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => MyPetsScreen()));
+                  });
+                },
+              ),
+              new Divider(),
+              new ListTile(
+                title: new Text('Meus Pets Adotados'),
+                onTap: () {
+                  this.setState(() {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => AdoptedPets()));
+                  });
+                },
+              ),
+              new Divider(),
+              new ListTile(
+                title: new Text('Logout'),
+                onTap: () {
+                  AuthService().signOut();
+                  Navigator.push(
+                      context, MaterialPageRoute(builder: (context) => Home()));
+                },
+              ),
+
+            ]));
       else
         return new SizedBox(
           height: 0,

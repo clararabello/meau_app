@@ -96,7 +96,6 @@ class _AnimalRegisterScreenState extends State<AnimalRegisterScreen> {
             ),
             SizedBox(height: 20),
 
-            //TODO - colocar opção de tirar foto na hora (câmera)
             Container(
                 alignment: Alignment.centerLeft,
                 child: Text("FOTO DO ANIMAL", style: new TextStyle(color: const Color(0xffffd358))),
@@ -518,7 +517,7 @@ class _AnimalRegisterScreenState extends State<AnimalRegisterScreen> {
          'objects': objectController.text, 'medicine': medicineController.text, 'adoptionRequirements': _exigenciasAdocao == ["a"] ? [""] : _exigenciasAdocao,
          'trackingPeriod': _periodoAcompanhamento, 'sponsorshipRequirements': _exigenciasApadrinhamento == ["a"] ? [""] : _exigenciasApadrinhamento,
          'financialAid': _auxilioFinanceiro, 'registerType': _tipoCadastro == ["a"] ? [""] : _tipoCadastro, 'neighbourhood': neighbourhoodController.text,
-         'state': stateController.text, 'url': photoUrl.toString()
+         'state': stateController.text, 'url': photoUrl.toString(), 'isAvailable': true, 'adoptedBy': ""
        });
 
        print("Animal registered.");

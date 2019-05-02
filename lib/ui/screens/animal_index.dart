@@ -142,6 +142,7 @@ class _AnimalIndexScreenState extends State<AnimalIndexScreen> {
   loadAnimalsData() => Firestore.instance
       .collection('animals')
       .where('registerType', arrayContains: widget.tipo)
+      .where('isAvailable', isEqualTo: true)
       .snapshots();
 
   String chooseTitle() {

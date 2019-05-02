@@ -4,31 +4,31 @@ import 'package:first_project/session.dart';
 import 'package:first_project/ui/screens/animal_index.dart';
 import 'package:first_project/ui/screens/animal_view.dart';
 import 'package:first_project/ui/screens/home.dart';
+import 'package:first_project/ui/screens/my_pets.dart';
 import 'package:first_project/ui/screens/user_view.dart';
 import 'package:flutter/material.dart';
 
-class MyPetsScreen extends StatefulWidget {
+class AdoptedPets extends StatefulWidget {
   @override
-  _MyPetsScreenState createState() => _MyPetsScreenState();
+  _AdoptedPetsState createState() => _AdoptedPetsState();
 }
 
-class _MyPetsScreenState extends State<MyPetsScreen> {
+class _AdoptedPetsState extends State<AdoptedPets> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: loadMyAnimalsData(),
+      stream: loadAnimalsData(),
       builder: (context, snapshots) {
         if (snapshots.hasData)
           return Scaffold(
               backgroundColor: const Color(0xfffafafa),
               appBar: AppBar(
-                  title: Text("Meus Pets",
+                  title: Text("Meus pets adotados",
                       style: TextStyle(
                           color: const Color(0xff434343),
                           fontSize: 20,
                           fontFamily: 'Roboto-Medium')),
-                  backgroundColor: const Color(0xff589b9b),
-                iconTheme: IconThemeData(color: const Color(0xff434343)),
+                  backgroundColor: const Color(0xffffd358)
               ),
               drawer: returnBar(),
               body: ListView(
@@ -51,7 +51,7 @@ class _MyPetsScreenState extends State<MyPetsScreen> {
                                     children: <Widget>[
                                       Container(
                                         decoration: BoxDecoration(
-                                            color: const Color(0xffcfe9e5),
+                                            color: const Color(0xfffee29b),
                                             borderRadius: BorderRadius.only(
                                                 topLeft:
                                                 const Radius.circular(
@@ -76,7 +76,7 @@ class _MyPetsScreenState extends State<MyPetsScreen> {
                                         top: 5,
                                         left: 370,
                                         child: new Icon(
-                                          Icons.error,
+                                          Icons.favorite_border,
                                           color: const Color(0xff434343),
                                         ),
                                       )
@@ -93,25 +93,41 @@ class _MyPetsScreenState extends State<MyPetsScreen> {
                                               image: new NetworkImage(
                                                   animal.data["url"])))),
                                   Padding(
-                                    padding: EdgeInsets.fromLTRB(0, 6, 0, 6),
-                                      child:
-                                      Column(children: <Widget>[
-                                        FutureBuilder(
-                                          future: numberOfInteresteds(animal.documentID),
-                                          builder: (context, AsyncSnapshot<int> result) {
-                                            if (!result.hasData)
-                                              return Container(); // future still needs to be finished (loading)
-                                            else
-                                              if (animal.data["isAvailable"])
-                                                return Text("${result.data} USUÁRIO(S) INTERESSADO(S)");
-                                              else
-                                                return Text("ESTE PET JÁ FOI ADOTADO ;)");
-                                              //SizedBox(height: 3),
-                                              //Text("${typeOfInterest(animal.documentID)}")
-                                          },
+                                    padding: EdgeInsets.only(
+                                        left: 40,
+                                        right: 40,
+                                        top: 5,
+                                        bottom: 5),
+                                    child: new Row(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        Column(
+                                          children: <Widget>[
+                                            Text(animal.data["sex"]
+                                                .toUpperCase())
+                                          ],
                                         ),
-                                      ]),
+                                        SizedBox(width: 60),
+                                        Column(
+                                          children: <Widget>[
+                                            Text(animal.data["age"]
+                                                .toUpperCase())
+                                          ],
+                                        ),
+                                        SizedBox(width: 60),
+                                        Column(
+                                          children: <Widget>[
+                                            Text(animal.data["size"]
+                                                .toUpperCase())
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
+                                  Center(
+                                      child: Text(
+                                          "${animal.data["neighbourhood"].toUpperCase()} - ${animal.data["state"].toUpperCase()}"))
                                 ]),
                               )))))
                       .toList()));
@@ -119,6 +135,16 @@ class _MyPetsScreenState extends State<MyPetsScreen> {
           return new Container();
       },
     );
+  }
+
+  loadAnimalsData() {
+    if(session.currentUser != null)
+      return Firestore.instance
+        .collection('animals')
+        .where('adoptedBy', isEqualTo: session.currentUser.uid)
+        .snapshots();
+    else
+      return null;
   }
 
   Widget returnBar() {
@@ -160,7 +186,6 @@ class _MyPetsScreenState extends State<MyPetsScreen> {
                 },
               ),
               new Divider(),
-
               new ListTile(
                 title: new Text('Meu perfil'),
                 onTap: () {
@@ -235,6 +260,7 @@ class _MyPetsScreenState extends State<MyPetsScreen> {
                       context, MaterialPageRoute(builder: (context) => Home()));
                 },
               ),
+
             ]));
       else
         return new SizedBox(
@@ -242,33 +268,4 @@ class _MyPetsScreenState extends State<MyPetsScreen> {
         );
     }
   }
-
-  loadMyAnimalsData() {
-    if (session.currentUser != null)
-      return Firestore.instance
-          .collection('animals')
-      //.orderBy('isAvailable', descending: true)
-          .where('userUid', isEqualTo: session.currentUser.uid)
-          .snapshots();
-    else
-      return null;
-  }
-
-  Future<int> numberOfInteresteds(String animal) async {
-    var result = await Firestore.instance
-        .collection('interesteds')
-        .where('animalUid', isEqualTo: animal)
-        .getDocuments();
-    final List<DocumentSnapshot> documents = result.documents;
-    return documents.length;
-  }
-
-  typeOfInterest(String animal) async {
-    var result = await Firestore.instance
-        .collection('interesteds')
-        .where('animalUid', isEqualTo: animal)
-        .getDocuments();
-
-  }
-
 }
