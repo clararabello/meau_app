@@ -64,9 +64,8 @@ class _InterestedViewState extends State<InterestedView> {
                                         decoration: new BoxDecoration(
                                             shape: BoxShape.circle,
                                             image: new DecorationImage(
-                                                fit: BoxFit.fill,
-                                                image: new NetworkImage(
-                                                    "https://i.imgur.com/BoN9kdC.png")
+                                                fit: BoxFit.cover,
+                                                image: new NetworkImage(interested.data["profilePicture"])
                                             )
                                         )),
 
