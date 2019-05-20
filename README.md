@@ -1,6 +1,6 @@
-# first_project
+# Meau
 
-A new Flutter application.
+A pet adoption and helping Flutter application.
 
 ## Getting Started
 
